@@ -162,7 +162,7 @@ document.getElementById('medKho').textContent=hrs(D.medKho); document.getElement
 Chart.defaults.font.family='"Be Vietnam Pro",system-ui,sans-serif'; Chart.defaults.font.size=13; Chart.defaults.color=C.text;
 const bar=(id,labels,sets,opt={})=>new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets:sets.map(s=>Object.assign({borderRadius:4,borderSkipped:'start',borderWidth:0,maxBarThickness:opt.horiz?22:46,categoryPercentage:0.7,barPercentage:0.85},s))},
  options:{indexAxis:opt.horiz?'y':'x',maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:opt.stack?'index':'nearest',callbacks:opt.tip||{}}},
- scales:{[opt.horiz?'y':'x']:{stacked:!!opt.stack,grid:{display:false},ticks:{autoSkip:false}},[opt.horiz?'x':'y']:{stacked:!!opt.stack,beginAtZero:true,grid:{color:C.line},border:{display:false},ticks:{callback:opt.pct?(v=>v+'%'):(v=>f(v))}}}}});
+ scales:{[opt.horiz?'y':'x']:{stacked:!!opt.stack,grid:{display:false},ticks:{autoSkip:false},afterFit:s=>{if(opt.horiz)s.width+=16}},[opt.horiz?'x':'y']:{stacked:!!opt.stack,beginAtZero:true,grid:{color:C.line},border:{display:false},ticks:{callback:opt.pct?(v=>v+'%'):(v=>f(v))}}}}});
 const days=D.byDay.map(d=>d.day.replace('-','/'));
 bar('cDay',days,[{label:'Số đơn',data:D.byDay.map(d=>d.n),backgroundColor:C.one}],{tip:{label:c=>' '+f(c.raw)+' đơn'}});
 bar('cLate',days,[{label:'Shop chậm',data:D.byDay.map(d=>+(d.kho/d.n*100).toFixed(1)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byDay.map(d=>+(d.vc/d.n*100).toFixed(1)),backgroundColor:C.vc}],
