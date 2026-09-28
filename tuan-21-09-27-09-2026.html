@@ -56,44 +56,60 @@ ul.plain li{margin:4px 0}
 
 <div class="card">
 <h2>Tỉ lệ đơn bị chậm theo ngày đặt</h2>
-<p class="note"><b>Kho chậm</b> = kho đóng gói xong sau hơn <b>24 giờ</b> kể từ lúc khách đặt (hoặc đến nay vẫn chưa đóng).<br>
-<b>Vận chuyển chậm</b> = sau khi kho đóng xong, hơn <b>48 giờ</b> đơn vị vận chuyển mới tới lấy (hoặc đến nay vẫn chưa lấy).<br>
+<p class="note"><b>Shop chậm</b> = shop đóng gói xong sau hơn <b>24 giờ</b> kể từ lúc khách đặt (hoặc đến nay vẫn chưa đóng).<br>
+<b>Vận chuyển chậm</b> = sau khi shop đóng xong, hơn <b>48 giờ</b> đơn vị vận chuyển mới tới lấy (hoặc đến nay vẫn chưa lấy).<br>
 Đơn đặt ngày 26–27/9 chưa đủ 48 giờ để tính phần vận chuyển nên cột cam thấp.</p>
-<div class="legend"><span><i style="background:var(--kho)"></i>Kho chậm</span><span><i style="background:var(--vc)"></i>Vận chuyển chậm</span></div>
+<div class="legend"><span><i style="background:var(--kho)"></i>Shop chậm</span><span><i style="background:var(--vc)"></i>Vận chuyển chậm</span></div>
 <div class="chart"><canvas id="cLate"></canvas></div>
 <details><summary>Xem bảng số</summary><table id="tDay"></table></details>
 </div>
 
 <div class="card">
-<h2>Kho mất bao lâu để đóng gói xong</h2>
-<p class="note">Tính từ lúc khách đặt đến lúc kho đóng gói xong. Một nửa số đơn được đóng xong trong khoảng <b id="medKho"></b>.</p>
+<h2>Shop mất bao lâu để đóng gói xong</h2>
+<p class="note">Tính từ lúc khách đặt đến lúc shop đóng gói xong. Một nửa số đơn được đóng xong trong khoảng <b id="medKho"></b>.</p>
 <div class="chart"><canvas id="cKho"></canvas></div>
 </div>
 
 <div class="card">
 <h2>Đơn vị vận chuyển mất bao lâu để tới lấy hàng</h2>
-<p class="note">Tính từ lúc kho đóng gói xong đến lúc đơn vị vận chuyển nhận hàng. Một nửa số đơn được lấy trong khoảng <b id="medVc"></b>.</p>
+<p class="note">Tính từ lúc shop đóng gói xong đến lúc đơn vị vận chuyển nhận hàng. Một nửa số đơn được lấy trong khoảng <b id="medVc"></b>.</p>
 <div class="chart"><canvas id="cVc"></canvas></div>
 </div>
 
 <div class="card">
 <h2>So sánh hai đơn vị vận chuyển</h2>
 <p class="note">Tỉ lệ trên tổng số đơn của từng đơn vị.</p>
-<div class="legend"><span><i style="background:var(--kho)"></i>Kho chậm</span><span><i style="background:var(--vc)"></i>Vận chuyển chậm</span><span><i style="background:var(--ret)"></i>Bị trả về</span></div>
+<div class="legend"><span><i style="background:var(--kho)"></i>Shop chậm</span><span><i style="background:var(--vc)"></i>Vận chuyển chậm</span><span><i style="background:var(--ret)"></i>Bị trả về</span></div>
 <div class="chart"><canvas id="cProv"></canvas></div>
 <details><summary>Xem bảng số</summary><table id="tProv"></table></details>
 </div>
 
 <div class="card">
-<h2>10 cửa hàng có nhiều đơn đóng gói chậm nhất</h2>
-<p class="note">Số đơn kho đóng xong sau hơn 24 giờ. Rê chuột vào cột để xem tổng số đơn của cửa hàng.</p>
-<div class="chart tall"><canvas id="cWh"></canvas></div>
+<h2>10 shop có nhiều đơn nhất</h2>
+<p class="note">Tổng số đơn POST trong tuần của từng shop. Rê chuột vào cột để xem số đơn bị chậm.</p>
+<div class="chart tall"><canvas id="cTopVol"></canvas></div>
+<details><summary>Xem bảng số</summary><table id="tTopVol"></table></details>
 </div>
 
 <div class="card">
-<h2>Vì sao còn đơn chưa được đóng gói</h2>
-<p class="note">Các đơn đã quá 24 giờ mà đến nay kho vẫn chưa đóng, chia theo lý do đang ghi trên hệ thống.</p>
-<div class="chart"><canvas id="cNp"></canvas></div>
+<h2>10 shop có nhiều đơn bị vận chuyển tới lấy chậm</h2>
+<p class="note">Số đơn shop đã đóng xong nhưng quá 48 giờ đơn vị vận chuyển mới tới lấy (hoặc đến nay chưa lấy).</p>
+<div class="chart tall"><canvas id="cTopVc"></canvas></div>
+<details><summary>Xem bảng số</summary><table id="tTopVc"></table></details>
+</div>
+
+<div class="card">
+<h2>Vì sao shop đóng gói chậm</h2>
+<p class="note">Toàn bộ <b id="rTot"></b> đơn shop đóng xong sau hơn 24 giờ (hoặc đến nay chưa đóng), chia theo lý do ghi trên hệ thống: ghi chú chờ phiếu chuyển hàng, lịch sử đổi shop xử lý, lý do trễ đã chọn.</p>
+<div class="chart"><canvas id="cReason"></canvas></div>
+</div>
+
+<div class="card">
+<h2>10 shop có nhiều đơn đóng gói chậm nhất</h2>
+<p class="note">Mỗi cột chia theo lý do chậm. Rê chuột vào từng phần để xem số đơn.</p>
+<div class="legend" id="lgReason"></div>
+<div class="chart tall"><canvas id="cTopKho"></canvas></div>
+<details><summary>Xem bảng số</summary><table id="tTopKho"></table></details>
 </div>
 
 <div class="card">
@@ -105,8 +121,8 @@ ul.plain li{margin:4px 0}
 <div class="card">
 <h2>Cách tính</h2>
 <ul class="plain">
-<li>Giờ khách đặt, giờ kho đóng gói xong và giờ đơn vị vận chuyển nhận hàng lấy từ lịch sử trạng thái của từng đơn trên hệ thống OMS (giờ đóng gói do kho WMS cập nhật sang).</li>
-<li>Một đơn có thể vừa chậm ở kho vừa chậm ở vận chuyển, nên cộng hai tỉ lệ sẽ lớn hơn tỉ lệ "có ít nhất một khâu chậm" một chút.</li>
+<li>Giờ khách đặt, giờ shop đóng gói xong và giờ đơn vị vận chuyển nhận hàng lấy từ lịch sử trạng thái của từng đơn trên hệ thống OMS (giờ đóng gói do kho WMS cập nhật sang).</li>
+<li>Một đơn có thể vừa chậm ở shop vừa chậm ở vận chuyển, nên cộng hai tỉ lệ sẽ lớn hơn tỉ lệ "có ít nhất một khâu chậm" một chút.</li>
 <li>Đơn bị trả về: đơn đang chờ trả, đang trên đường trả hoặc đã trả về kho.</li>
 </ul>
 </div>
@@ -122,32 +138,40 @@ const f=n=>n.toLocaleString('vi-VN'), p=(a,b)=>(a/b*100).toFixed(1).replace('.',
 const hrs=h=>{const t=Math.round(h*10)/10;return (t+'').replace('.',',')+' giờ'};
 // tiles
 const T=[['Tổng số đơn',f(D.N),'đơn trong tuần',null],
-['Kho đóng gói chậm',p(D.kho,D.N),f(D.kho)+' đơn quá 24 giờ · '+f(D.khoChuaDong)+' đơn đến nay chưa đóng',C.kho],
+['Shop đóng gói chậm',p(D.kho,D.N),f(D.kho)+' đơn quá 24 giờ · '+f(D.khoChuaDong)+' đơn đến nay chưa đóng',C.kho],
 ['Vận chuyển tới lấy chậm',p(D.vc,D.N),f(D.vc)+' đơn quá 48 giờ · '+f(D.vcChuaLay)+' đơn đã đóng chưa được lấy',C.vc],
 ['Đơn bị trả về',p(D.ret,D.N),f(D.ret)+' đơn',C.ret]];
 document.getElementById('tiles').innerHTML=T.map(([k,v,n,c])=>`<div class="tile"><div class="k">${c?`<span class="dot" style="background:${c}"></span>`:''}${k}</div><div class="v">${v}</div><div class="n">${n}</div></div>`).join('');
 document.getElementById('medKho').textContent=hrs(D.medKho); document.getElementById('medVc').textContent=hrs(D.medVc);
 Chart.defaults.font.family='"Be Vietnam Pro",system-ui,sans-serif'; Chart.defaults.font.size=13; Chart.defaults.color=C.text;
 const bar=(id,labels,sets,opt={})=>new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets:sets.map(s=>Object.assign({borderRadius:4,borderSkipped:'start',borderWidth:0,maxBarThickness:opt.horiz?22:46,categoryPercentage:0.7,barPercentage:0.85},s))},
- options:{indexAxis:opt.horiz?'y':'x',maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:opt.tip||{}}},
- scales:{[opt.horiz?'y':'x']:{grid:{display:false},ticks:{autoSkip:false}},[opt.horiz?'x':'y']:{beginAtZero:true,grid:{color:C.line},border:{display:false},ticks:{callback:opt.pct?(v=>v+'%'):(v=>f(v))}}}}});
+ options:{indexAxis:opt.horiz?'y':'x',maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{mode:opt.stack?'index':'nearest',callbacks:opt.tip||{}}},
+ scales:{[opt.horiz?'y':'x']:{stacked:!!opt.stack,grid:{display:false},ticks:{autoSkip:false}},[opt.horiz?'x':'y']:{stacked:!!opt.stack,beginAtZero:true,grid:{color:C.line},border:{display:false},ticks:{callback:opt.pct?(v=>v+'%'):(v=>f(v))}}}}});
 const days=D.byDay.map(d=>d.day.replace('-','/'));
 bar('cDay',days,[{label:'Số đơn',data:D.byDay.map(d=>d.n),backgroundColor:C.one}],{tip:{label:c=>' '+f(c.raw)+' đơn'}});
-bar('cLate',days,[{label:'Kho chậm',data:D.byDay.map(d=>+(d.kho/d.n*100).toFixed(1)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byDay.map(d=>+(d.vc/d.n*100).toFixed(1)),backgroundColor:C.vc}],
+bar('cLate',days,[{label:'Shop chậm',data:D.byDay.map(d=>+(d.kho/d.n*100).toFixed(1)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byDay.map(d=>+(d.vc/d.n*100).toFixed(1)),backgroundColor:C.vc}],
  {pct:true,tip:{label:c=>{const d=D.byDay[c.dataIndex],k=c.datasetIndex?d.vc:d.kho;return ' '+c.dataset.label+': '+p(k,d.n)+' ('+f(k)+'/'+f(d.n)+' đơn)'}}});
-document.getElementById('tDay').innerHTML='<tr><th>Ngày đặt</th><th>Số đơn</th><th>Kho chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byDay.map(d=>`<tr><td>${d.day.replace('-','/')}</td><td>${f(d.n)}</td><td>${f(d.kho)} (${p(d.kho,d.n)})</td><td>${f(d.vc)} (${p(d.vc,d.n)})</td><td>${f(d.ret)}</td></tr>`).join('');
+document.getElementById('tDay').innerHTML='<tr><th>Ngày đặt</th><th>Số đơn</th><th>Shop chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byDay.map(d=>`<tr><td>${d.day.replace('-','/')}</td><td>${f(d.n)}</td><td>${f(d.kho)} (${p(d.kho,d.n)})</td><td>${f(d.vc)} (${p(d.vc,d.n)})</td><td>${f(d.ret)}</td></tr>`).join('');
 const dist=(id,arr,col,tot)=>bar(id,arr.map(x=>x[0]),[{label:'Số đơn',data:arr.map(x=>x[1]),backgroundColor:arr.map(x=>/Chưa/.test(x[0])?C.line:col)}],{tip:{label:c=>' '+f(c.raw)+' đơn ('+p(c.raw,tot)+')'}});
 dist('cKho',D.khoDist,C.kho,D.N);
 dist('cVc',D.vcDist,C.vc,D.vcDist.reduce((s,x)=>s+x[1],0));
 const pv=D.byProv.map(x=>x.p);
-bar('cProv',pv,[{label:'Kho chậm',data:D.byProv.map(x=>+(x.kho/x.n*100).toFixed(2)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byProv.map(x=>+(x.vc/x.n*100).toFixed(2)),backgroundColor:C.vc},{label:'Bị trả về',data:D.byProv.map(x=>+(x.ret/x.n*100).toFixed(2)),backgroundColor:C.ret}],
+bar('cProv',pv,[{label:'Shop chậm',data:D.byProv.map(x=>+(x.kho/x.n*100).toFixed(2)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byProv.map(x=>+(x.vc/x.n*100).toFixed(2)),backgroundColor:C.vc},{label:'Bị trả về',data:D.byProv.map(x=>+(x.ret/x.n*100).toFixed(2)),backgroundColor:C.ret}],
  {pct:true,tip:{label:c=>{const x=D.byProv[c.dataIndex],k=[x.kho,x.vc,x.ret][c.datasetIndex];return ' '+c.dataset.label+': '+p(k,x.n)+' ('+f(k)+' đơn)'}}});
-document.getElementById('tProv').innerHTML='<tr><th>Đơn vị</th><th>Số đơn</th><th>Kho chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byProv.map(x=>`<tr><td>${x.p}</td><td>${f(x.n)}</td><td>${f(x.kho)} (${p(x.kho,x.n)})</td><td>${f(x.vc)} (${p(x.vc,x.n)})</td><td>${f(x.ret)} (${p(x.ret,x.n)})</td></tr>`).join('');
-const wh=D.topWh.map(x=>x.w.replace(/^SHOP - /,''));
-bar('cWh',wh,[{label:'Đơn đóng gói chậm',data:D.topWh.map(x=>x.k),backgroundColor:C.kho}],{horiz:true,tip:{label:c=>{const x=D.topWh[c.dataIndex];return ' '+f(x.k)+' đơn chậm / '+f(x.n)+' đơn ('+p(x.k,x.n)+')'}}});
-const NP={'Processing / Chờ chuyển kho (IT)':'Chờ hàng chuyển từ kho khác','Picking / Chờ chuyển kho (IT)':'Chờ hàng chuyển từ kho khác','Processing / Other':'Đang xử lý – lý do khác','Processing / Không ghi lý do':'Đang xử lý – chưa ghi lý do','Picking / Không ghi lý do':'Đang lấy hàng trên kệ','Processing / No Answer':'Gọi khách không nghe máy','Pending / Waiting CS':'Chờ chăm sóc khách hàng xác nhận'};
-const np={}; D.np.forEach(([k,v])=>{const l=NP[k]||k;np[l]=(np[l]||0)+v}); const npE=Object.entries(np).sort((a,b)=>b[1]-a[1]);
-bar('cNp',npE.map(x=>x[0]),[{label:'Số đơn',data:npE.map(x=>x[1]),backgroundColor:C.kho}],{horiz:true,tip:{label:c=>' '+f(c.raw)+' đơn'}});
+document.getElementById('tProv').innerHTML='<tr><th>Đơn vị</th><th>Số đơn</th><th>Shop chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byProv.map(x=>`<tr><td>${x.p}</td><td>${f(x.n)}</td><td>${f(x.kho)} (${p(x.kho,x.n)})</td><td>${f(x.vc)} (${p(x.vc,x.n)})</td><td>${f(x.ret)} (${p(x.ret,x.n)})</td></tr>`).join('');
+const TOP={"CATS":["Chờ chuyển hàng từ kho khác","Chuyển sang shop khác xử lý","Chờ xác nhận đơn","Lý do khác","Không ghi lý do"],"reasonAll":[["Chờ chuyển hàng từ kho khác",460],["Chuyển sang shop khác xử lý",287],["Chờ xác nhận đơn",35],["Lý do khác",50],["Không ghi lý do",564]],"topVol":[{"w":"170 QUOC LO 1A","n":1428,"kho":508,"vc":0},{"w":"71 TRAN HUNG DAO","n":240,"kho":5,"vc":0},{"w":"11 QUANG TRUNG","n":234,"kho":3,"vc":0},{"w":"174 PHAN DINH PHUNG","n":192,"kho":1,"vc":0},{"w":"277 TRAN HUNG DAO","n":177,"kho":0,"vc":0},{"w":"199 HUNG VUONG","n":172,"kho":10,"vc":0},{"w":"517 PHU LOI","n":167,"kho":68,"vc":0},{"w":"295 GIAI PHONG","n":162,"kho":2,"vc":0},{"w":"212 LE LOI","n":158,"kho":0,"vc":0},{"w":"113 LUONG KHANH THIEN","n":152,"kho":6,"vc":0}],"topVc":[{"w":"461 TRUONG DINH","k":31,"n":58},{"w":"1 22 THANG 12","k":26,"n":122},{"w":"34 DT 746","k":23,"n":147},{"w":"2857 LUONG DINH CUA","k":18,"n":62},{"w":"1297 HUNG VUONG","k":13,"n":38},{"w":"553 DT 767","k":13,"n":33},{"w":"182 PHAN DANG LUU","k":13,"n":47},{"w":"5 TRAN HUNG DAO","k":12,"n":73},{"w":"276 QUANG TRUNG","k":12,"n":122},{"w":"78 DT 835","k":12,"n":43}],"topKho":[{"w":"170 QUOC LO 1A","k":508,"n":1428,"by":[229,14,13,0,252]},{"w":"517 PHU LOI","k":68,"n":167,"by":[8,54,4,0,2]},{"w":"79 XUAN LA","k":65,"n":142,"by":[1,2,0,50,12]},{"w":"75 DONG KHOI","k":58,"n":133,"by":[5,7,0,0,46]},{"w":"594 NGUYEN VAN CU","k":48,"n":98,"by":[2,12,0,0,34]},{"w":"459 NGUYEN DANG","k":48,"n":100,"by":[0,1,0,0,47]},{"w":"240 TINH LO 825","k":40,"n":90,"by":[0,1,0,0,39]},{"w":"137 NGUYEN TRAI","k":33,"n":84,"by":[0,8,0,0,25]},{"w":"477 LE VAN THO","k":32,"n":73,"by":[20,7,0,0,5]},{"w":"33 LE XOAY","k":22,"n":73,"by":[0,8,0,0,14]}]};
+const sn=w=>w.replace(/^SHOP - /,'');
+const RC=['#1baf7a','#eda100','#e87ba4','#4a3aa7','#a3a29a'];
+bar('cTopVol',TOP.topVol.map(x=>sn(x.w)),[{label:'Số đơn',data:TOP.topVol.map(x=>x.n),backgroundColor:C.one}],{horiz:true,tip:{label:c=>{const x=TOP.topVol[c.dataIndex];return [' '+f(x.n)+' đơn',' Shop chậm: '+f(x.kho)+' ('+p(x.kho,x.n)+')',' Vận chuyển chậm: '+f(x.vc)+' ('+p(x.vc,x.n)+')']}}});
+document.getElementById('tTopVol').innerHTML='<tr><th>Shop</th><th>Số đơn</th><th>Shop chậm</th><th>Vận chuyển chậm</th></tr>'+TOP.topVol.map(x=>`<tr><td>${sn(x.w)}</td><td>${f(x.n)}</td><td>${f(x.kho)} (${p(x.kho,x.n)})</td><td>${f(x.vc)} (${p(x.vc,x.n)})</td></tr>`).join('');
+bar('cTopVc',TOP.topVc.map(x=>sn(x.w)),[{label:'Đơn vận chuyển chậm',data:TOP.topVc.map(x=>x.k),backgroundColor:C.vc}],{horiz:true,tip:{label:c=>{const x=TOP.topVc[c.dataIndex];return ' '+f(x.k)+' đơn chậm / '+f(x.n)+' đơn ('+p(x.k,x.n)+')'}}});
+document.getElementById('tTopVc').innerHTML='<tr><th>Shop</th><th>Số đơn</th><th>Vận chuyển chậm</th></tr>'+TOP.topVc.map(x=>`<tr><td>${sn(x.w)}</td><td>${f(x.n)}</td><td>${f(x.k)} (${p(x.k,x.n)})</td></tr>`).join('');
+const rTot=TOP.reasonAll.reduce((s,x)=>s+x[1],0); document.getElementById('rTot').textContent=f(rTot);
+bar('cReason',TOP.reasonAll.map(x=>x[0]),[{label:'Số đơn',data:TOP.reasonAll.map(x=>x[1]),backgroundColor:TOP.reasonAll.map(x=>RC[TOP.CATS.indexOf(x[0])])}],{horiz:true,tip:{label:c=>' '+f(c.raw)+' đơn ('+p(c.raw,rTot)+')'}});
+document.getElementById('lgReason').innerHTML=TOP.CATS.map((k,i)=>`<span><i style="background:${RC[i]}"></i>${k}</span>`).join('');
+bar('cTopKho',TOP.topKho.map(x=>sn(x.w)),TOP.CATS.map((k,i)=>({label:k,data:TOP.topKho.map(x=>x.by[i]),backgroundColor:RC[i],borderRadius:0,borderWidth:1,borderColor:css('--surface')})),{horiz:true,stack:true,
+ tip:{title:c=>{const x=TOP.topKho[c[0].dataIndex];return sn(x.w)+': '+f(x.k)+' đơn chậm / '+f(x.n)+' đơn'},label:c=>c.raw?' '+c.dataset.label+': '+f(c.raw)+' đơn':null}});
+document.getElementById('tTopKho').innerHTML='<tr><th>Shop</th><th>Số đơn</th><th>Shop chậm</th>'+TOP.CATS.map(k=>'<th>'+k+'</th>').join('')+'</tr>'+TOP.topKho.map(x=>`<tr><td>${sn(x.w)}</td><td>${f(x.n)}</td><td>${f(x.k)} (${p(x.k,x.n)})</td>${x.by.map(v=>'<td>'+f(v)+'</td>').join('')}</tr>`).join('');
 const RG={waiting_to_return:'Giao không được, chờ trả về',return:'Đang trên đường trả về',Returning:'Đang trên đường trả về',returning:'Đang trên đường trả về',return_transporting:'Đang trên đường trả về',Returned:'Đã trả về kho',returned:'Đã trả về kho'};
 const rg={}; D.ret2.forEach(([k,v])=>{const l=RG[k]||'Khác';rg[l]=(rg[l]||0)+v}); const rgE=['Giao không được, chờ trả về','Đang trên đường trả về','Đã trả về kho'].map(k=>[k,rg[k]||0]);
 bar('cRet',rgE.map(x=>x[0]),[{label:'Số đơn',data:rgE.map(x=>x[1]),backgroundColor:C.ret}],{tip:{label:c=>' '+f(c.raw)+' đơn'}});
