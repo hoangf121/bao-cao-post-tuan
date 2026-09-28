@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đơn POST tuần 21–27/9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{color-scheme:light;--bg:#f6f6f4;--surface:#fcfcfb;--line:#e4e3de;--text:#1c1c1a;--muted:#5d5c57;--faint:#8a8983;
+ --kho:#2a78d6;--vc:#eb6834;--ret:#1baf7a;--one:#2a78d6;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#121211;--surface:#1a1a19;--line:#2f2f2c;--text:#f3f2ee;--muted:#c3c2b7;--faint:#8f8e86;--kho:#3987e5;--vc:#d95926;--ret:#199e70;--one:#3987e5;}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121211;--surface:#1a1a19;--line:#2f2f2c;--text:#f3f2ee;--muted:#c3c2b7;--faint:#8f8e86;--kho:#3987e5;--vc:#d95926;--ret:#199e70;--one:#3987e5;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Be Vietnam Pro",system-ui,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 16px 60px}
+h1{font-size:28px;line-height:1.25;margin:0 0 6px}
+h2{font-size:20px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 24px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:28px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.tile .k{font-size:14px;color:var(--muted)}
+.tile .v{font-size:32px;font-weight:700;line-height:1.2;margin:4px 0}
+.tile .n{font-size:14px;color:var(--muted)}
+.tile .dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 12px;margin-bottom:18px}
+.card p.note{color:var(--muted);margin:2px 0 12px;font-size:15px}
+.chart{position:relative;height:300px}
+.chart.tall{height:380px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:0 0 8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:6px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:500}
+details{margin-top:6px}
+summary{cursor:pointer;color:var(--muted);font-size:14px}
+ul.plain{margin:6px 0 0;padding-left:20px}
+ul.plain li{margin:4px 0}
+.foot{color:var(--faint);font-size:13px;margin-top:28px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Đơn POST tuần 21/9 – 27/9/2026</h1>
+<p class="sub">Đơn Hasaki giao qua Giao Hàng Nhanh và Shopee Express, tính theo ngày khách đặt. Không tính đơn đã huỷ. Số liệu lấy ngày 28/9/2026 lúc 14 giờ.</p>
+
+<div class="tiles" id="tiles"></div>
+
+<div class="card">
+<h2>Mỗi ngày có bao nhiêu đơn</h2>
+<p class="note">Ngày 24/9 và 25/9 đơn tăng gần gấp đôi các ngày khác.</p>
+<div class="chart"><canvas id="cDay"></canvas></div>
+</div>
+
+<div class="card">
+<h2>Tỉ lệ đơn bị chậm theo ngày đặt</h2>
+<p class="note"><b>Kho chậm</b> = kho đóng gói xong sau hơn <b>24 giờ</b> kể từ lúc khách đặt (hoặc đến nay vẫn chưa đóng).<br>
+<b>Vận chuyển chậm</b> = sau khi kho đóng xong, hơn <b>48 giờ</b> đơn vị vận chuyển mới tới lấy (hoặc đến nay vẫn chưa lấy).<br>
+Đơn đặt ngày 26–27/9 chưa đủ 48 giờ để tính phần vận chuyển nên cột cam thấp.</p>
+<div class="legend"><span><i style="background:var(--kho)"></i>Kho chậm</span><span><i style="background:var(--vc)"></i>Vận chuyển chậm</span></div>
+<div class="chart"><canvas id="cLate"></canvas></div>
+<details><summary>Xem bảng số</summary><table id="tDay"></table></details>
+</div>
+
+<div class="card">
+<h2>Kho mất bao lâu để đóng gói xong</h2>
+<p class="note">Tính từ lúc khách đặt đến lúc kho đóng gói xong. Một nửa số đơn được đóng xong trong khoảng <b id="medKho"></b>.</p>
+<div class="chart"><canvas id="cKho"></canvas></div>
+</div>
+
+<div class="card">
+<h2>Đơn vị vận chuyển mất bao lâu để tới lấy hàng</h2>
+<p class="note">Tính từ lúc kho đóng gói xong đến lúc đơn vị vận chuyển nhận hàng. Một nửa số đơn được lấy trong khoảng <b id="medVc"></b>.</p>
+<div class="chart"><canvas id="cVc"></canvas></div>
+</div>
+
+<div class="card">
+<h2>So sánh hai đơn vị vận chuyển</h2>
+<p class="note">Tỉ lệ trên tổng số đơn của từng đơn vị.</p>
+<div class="legend"><span><i style="background:var(--kho)"></i>Kho chậm</span><span><i style="background:var(--vc)"></i>Vận chuyển chậm</span><span><i style="background:var(--ret)"></i>Bị trả về</span></div>
+<div class="chart"><canvas id="cProv"></canvas></div>
+<details><summary>Xem bảng số</summary><table id="tProv"></table></details>
+</div>
+
+<div class="card">
+<h2>10 cửa hàng có nhiều đơn đóng gói chậm nhất</h2>
+<p class="note">Số đơn kho đóng xong sau hơn 24 giờ. Rê chuột vào cột để xem tổng số đơn của cửa hàng.</p>
+<div class="chart tall"><canvas id="cWh"></canvas></div>
+</div>
+
+<div class="card">
+<h2>Vì sao còn đơn chưa được đóng gói</h2>
+<p class="note">Các đơn đã quá 24 giờ mà đến nay kho vẫn chưa đóng, chia theo lý do đang ghi trên hệ thống.</p>
+<div class="chart"><canvas id="cNp"></canvas></div>
+</div>
+
+<div class="card">
+<h2>Đơn bị trả về</h2>
+<p class="note">Đơn giao không thành công và đang hoặc đã quay về. Vẫn còn nhiều đơn đang trên đường giao nên con số này có thể tăng thêm trong vài ngày tới.</p>
+<div class="chart"><canvas id="cRet"></canvas></div>
+</div>
+
+<div class="card">
+<h2>Cách tính</h2>
+<ul class="plain">
+<li>Giờ khách đặt, giờ kho đóng gói xong và giờ đơn vị vận chuyển nhận hàng lấy từ lịch sử trạng thái của từng đơn trên hệ thống OMS (giờ đóng gói do kho WMS cập nhật sang).</li>
+<li>Một đơn có thể vừa chậm ở kho vừa chậm ở vận chuyển, nên cộng hai tỉ lệ sẽ lớn hơn tỉ lệ "có ít nhất một khâu chậm" một chút.</li>
+<li>Đơn bị trả về: đơn đang chờ trả, đang trên đường trả hoặc đã trả về kho.</li>
+</ul>
+</div>
+
+<p class="foot">Nguồn: OMS Hasaki – lịch sử trạng thái đơn. Cập nhật 28/9/2026.</p>
+</div>
+
+<script>
+const D={"N":13425,"kho":1396,"vc":339,"any":1709,"both":26,"ret":95,"khoChuaDong":267,"vcChuaLay":137,"byDay":[{"day":"21-09","n":1502,"kho":122,"vc":59,"ret":39},{"day":"22-09","n":1668,"kho":166,"vc":44,"ret":32},{"day":"23-09","n":1433,"kho":137,"vc":33,"ret":17},{"day":"24-09","n":3032,"kho":245,"vc":93,"ret":6},{"day":"25-09","n":2765,"kho":376,"vc":97,"ret":1},{"day":"26-09","n":1470,"kho":246,"vc":13,"ret":0},{"day":"27-09","n":1555,"kho":104,"vc":0,"ret":0}],"khoDist":[["Dưới 4 giờ",5541],["4–12 giờ",3742],["12–24 giờ",2527],["1–2 ngày",869],["Trên 2 ngày",260],["Chưa xong",486]],"vcDist":[["Dưới 4 giờ",3608],["4–12 giờ",3327],["12–24 giờ",3835],["1–2 ngày",865],["Trên 2 ngày",202],["Chưa xong",1102]],"byProv":[{"p":"Giao hàng nhanh","n":7831,"kho":712,"vc":179,"ret":81},{"p":"Shopee Express","n":5589,"kho":684,"vc":160,"ret":14}],"topWh":[{"w":"SHOP - 170 QUOC LO 1A","k":508,"n":1428,"r":0.3557422969187675},{"w":"SHOP - 517 PHU LOI","k":68,"n":167,"r":0.40718562874251496},{"w":"SHOP - 79 XUAN LA","k":65,"n":142,"r":0.45774647887323944},{"w":"SHOP - 75 DONG KHOI","k":58,"n":133,"r":0.43609022556390975},{"w":"SHOP - 594 NGUYEN VAN CU","k":48,"n":98,"r":0.4897959183673469},{"w":"SHOP - 459 NGUYEN DANG","k":48,"n":100,"r":0.48},{"w":"SHOP - 240 TINH LO 825","k":40,"n":90,"r":0.4444444444444444},{"w":"SHOP - 137 NGUYEN TRAI","k":33,"n":84,"r":0.39285714285714285},{"w":"SHOP - 477 LE VAN THO","k":32,"n":73,"r":0.4383561643835616},{"w":"SHOP - 33 LE XOAY","k":22,"n":73,"r":0.3013698630136986}],"np":[["Processing / Chờ chuyển kho (IT)",123],["Processing / Other",52],["Processing / Không ghi lý do",51],["Picking / Không ghi lý do",30],["Processing / No Answer",7],["Pending / Waiting CS",3],["Picking / Chờ chuyển kho (IT)",1]],"ret2":[["waiting_to_return",63],["return",12],["Returning",11],["Returned",3],["return_transporting",3],["returning",2],["returned",1]],"medKho":5.328611111111111,"medVc":6.934444444444445,"pctKho24":0.8797020484171322,"pctVc48":0.899219414174202};
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C={kho:css('--kho'),vc:css('--vc'),ret:css('--ret'),one:css('--one'),text:css('--muted'),line:css('--line')};
+const f=n=>n.toLocaleString('vi-VN'), p=(a,b)=>(a/b*100).toFixed(1).replace('.',',')+'%';
+const hrs=h=>{const t=Math.round(h*10)/10;return (t+'').replace('.',',')+' giờ'};
+// tiles
+const T=[['Tổng số đơn',f(D.N),'đơn trong tuần',null],
+['Kho đóng gói chậm',p(D.kho,D.N),f(D.kho)+' đơn quá 24 giờ · '+f(D.khoChuaDong)+' đơn đến nay chưa đóng',C.kho],
+['Vận chuyển tới lấy chậm',p(D.vc,D.N),f(D.vc)+' đơn quá 48 giờ · '+f(D.vcChuaLay)+' đơn đã đóng chưa được lấy',C.vc],
+['Đơn bị trả về',p(D.ret,D.N),f(D.ret)+' đơn',C.ret]];
+document.getElementById('tiles').innerHTML=T.map(([k,v,n,c])=>`<div class="tile"><div class="k">${c?`<span class="dot" style="background:${c}"></span>`:''}${k}</div><div class="v">${v}</div><div class="n">${n}</div></div>`).join('');
+document.getElementById('medKho').textContent=hrs(D.medKho); document.getElementById('medVc').textContent=hrs(D.medVc);
+Chart.defaults.font.family='"Be Vietnam Pro",system-ui,sans-serif'; Chart.defaults.font.size=13; Chart.defaults.color=C.text;
+const bar=(id,labels,sets,opt={})=>new Chart(document.getElementById(id),{type:'bar',data:{labels,datasets:sets.map(s=>Object.assign({borderRadius:4,borderSkipped:'start',borderWidth:0,maxBarThickness:opt.horiz?22:46,categoryPercentage:0.7,barPercentage:0.85},s))},
+ options:{indexAxis:opt.horiz?'y':'x',maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{callbacks:opt.tip||{}}},
+ scales:{[opt.horiz?'y':'x']:{grid:{display:false},ticks:{autoSkip:false}},[opt.horiz?'x':'y']:{beginAtZero:true,grid:{color:C.line},border:{display:false},ticks:{callback:opt.pct?(v=>v+'%'):(v=>f(v))}}}}});
+const days=D.byDay.map(d=>d.day.replace('-','/'));
+bar('cDay',days,[{label:'Số đơn',data:D.byDay.map(d=>d.n),backgroundColor:C.one}],{tip:{label:c=>' '+f(c.raw)+' đơn'}});
+bar('cLate',days,[{label:'Kho chậm',data:D.byDay.map(d=>+(d.kho/d.n*100).toFixed(1)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byDay.map(d=>+(d.vc/d.n*100).toFixed(1)),backgroundColor:C.vc}],
+ {pct:true,tip:{label:c=>{const d=D.byDay[c.dataIndex],k=c.datasetIndex?d.vc:d.kho;return ' '+c.dataset.label+': '+p(k,d.n)+' ('+f(k)+'/'+f(d.n)+' đơn)'}}}});
+document.getElementById('tDay').innerHTML='<tr><th>Ngày đặt</th><th>Số đơn</th><th>Kho chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byDay.map(d=>`<tr><td>${d.day.replace('-','/')}</td><td>${f(d.n)}</td><td>${f(d.kho)} (${p(d.kho,d.n)})</td><td>${f(d.vc)} (${p(d.vc,d.n)})</td><td>${f(d.ret)}</td></tr>`).join('');
+const dist=(id,arr,col,tot)=>bar(id,arr.map(x=>x[0]),[{label:'Số đơn',data:arr.map(x=>x[1]),backgroundColor:arr.map(x=>/Chưa/.test(x[0])?C.line:col)}],{tip:{label:c=>' '+f(c.raw)+' đơn ('+p(c.raw,tot)+')'}});
+dist('cKho',D.khoDist,C.kho,D.N);
+dist('cVc',D.vcDist,C.vc,D.vcDist.reduce((s,x)=>s+x[1],0));
+const pv=D.byProv.map(x=>x.p);
+bar('cProv',pv,[{label:'Kho chậm',data:D.byProv.map(x=>+(x.kho/x.n*100).toFixed(2)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byProv.map(x=>+(x.vc/x.n*100).toFixed(2)),backgroundColor:C.vc},{label:'Bị trả về',data:D.byProv.map(x=>+(x.ret/x.n*100).toFixed(2)),backgroundColor:C.ret}],
+ {pct:true,tip:{label:c=>{const x=D.byProv[c.dataIndex],k=[x.kho,x.vc,x.ret][c.datasetIndex];return ' '+c.dataset.label+': '+p(k,x.n)+' ('+f(k)+' đơn)'}}}});
+document.getElementById('tProv').innerHTML='<tr><th>Đơn vị</th><th>Số đơn</th><th>Kho chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byProv.map(x=>`<tr><td>${x.p}</td><td>${f(x.n)}</td><td>${f(x.kho)} (${p(x.kho,x.n)})</td><td>${f(x.vc)} (${p(x.vc,x.n)})</td><td>${f(x.ret)} (${p(x.ret,x.n)})</td></tr>`).join('');
+const wh=D.topWh.map(x=>x.w.replace(/^SHOP - /,''));
+bar('cWh',wh,[{label:'Đơn đóng gói chậm',data:D.topWh.map(x=>x.k),backgroundColor:C.kho}],{horiz:true,tip:{label:c=>{const x=D.topWh[c.dataIndex];return ' '+f(x.k)+' đơn chậm / '+f(x.n)+' đơn ('+p(x.k,x.n)+')'}}}});
+const NP={'Processing / Chờ chuyển kho (IT)':'Chờ hàng chuyển từ kho khác','Picking / Chờ chuyển kho (IT)':'Chờ hàng chuyển từ kho khác','Processing / Other':'Đang xử lý – lý do khác','Processing / Không ghi lý do':'Đang xử lý – chưa ghi lý do','Picking / Không ghi lý do':'Đang lấy hàng trên kệ','Processing / No Answer':'Gọi khách không nghe máy','Pending / Waiting CS':'Chờ chăm sóc khách hàng xác nhận'};
+const np={}; D.np.forEach(([k,v])=>{const l=NP[k]||k;np[l]=(np[l]||0)+v}); const npE=Object.entries(np).sort((a,b)=>b[1]-a[1]);
+bar('cNp',npE.map(x=>x[0]),[{label:'Số đơn',data:npE.map(x=>x[1]),backgroundColor:C.kho}],{horiz:true,tip:{label:c=>' '+f(c.raw)+' đơn'}});
+const RG={waiting_to_return:'Giao không được, chờ trả về',return:'Đang trên đường trả về',Returning:'Đang trên đường trả về',returning:'Đang trên đường trả về',return_transporting:'Đang trên đường trả về',Returned:'Đã trả về kho',returned:'Đã trả về kho'};
+const rg={}; D.ret2.forEach(([k,v])=>{const l=RG[k]||'Khác';rg[l]=(rg[l]||0)+v}); const rgE=['Giao không được, chờ trả về','Đang trên đường trả về','Đã trả về kho'].map(k=>[k,rg[k]||0]);
+bar('cRet',rgE.map(x=>x[0]),[{label:'Số đơn',data:rgE.map(x=>x[1]),backgroundColor:C.ret}],{tip:{label:c=>' '+f(c.raw)+' đơn'}});
+</script>
+</body>
+</html>
