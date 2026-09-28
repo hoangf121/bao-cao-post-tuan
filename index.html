@@ -134,17 +134,17 @@ const bar=(id,labels,sets,opt={})=>new Chart(document.getElementById(id),{type:'
 const days=D.byDay.map(d=>d.day.replace('-','/'));
 bar('cDay',days,[{label:'Số đơn',data:D.byDay.map(d=>d.n),backgroundColor:C.one}],{tip:{label:c=>' '+f(c.raw)+' đơn'}});
 bar('cLate',days,[{label:'Kho chậm',data:D.byDay.map(d=>+(d.kho/d.n*100).toFixed(1)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byDay.map(d=>+(d.vc/d.n*100).toFixed(1)),backgroundColor:C.vc}],
- {pct:true,tip:{label:c=>{const d=D.byDay[c.dataIndex],k=c.datasetIndex?d.vc:d.kho;return ' '+c.dataset.label+': '+p(k,d.n)+' ('+f(k)+'/'+f(d.n)+' đơn)'}}}});
+ {pct:true,tip:{label:c=>{const d=D.byDay[c.dataIndex],k=c.datasetIndex?d.vc:d.kho;return ' '+c.dataset.label+': '+p(k,d.n)+' ('+f(k)+'/'+f(d.n)+' đơn)'}}});
 document.getElementById('tDay').innerHTML='<tr><th>Ngày đặt</th><th>Số đơn</th><th>Kho chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byDay.map(d=>`<tr><td>${d.day.replace('-','/')}</td><td>${f(d.n)}</td><td>${f(d.kho)} (${p(d.kho,d.n)})</td><td>${f(d.vc)} (${p(d.vc,d.n)})</td><td>${f(d.ret)}</td></tr>`).join('');
 const dist=(id,arr,col,tot)=>bar(id,arr.map(x=>x[0]),[{label:'Số đơn',data:arr.map(x=>x[1]),backgroundColor:arr.map(x=>/Chưa/.test(x[0])?C.line:col)}],{tip:{label:c=>' '+f(c.raw)+' đơn ('+p(c.raw,tot)+')'}});
 dist('cKho',D.khoDist,C.kho,D.N);
 dist('cVc',D.vcDist,C.vc,D.vcDist.reduce((s,x)=>s+x[1],0));
 const pv=D.byProv.map(x=>x.p);
 bar('cProv',pv,[{label:'Kho chậm',data:D.byProv.map(x=>+(x.kho/x.n*100).toFixed(2)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byProv.map(x=>+(x.vc/x.n*100).toFixed(2)),backgroundColor:C.vc},{label:'Bị trả về',data:D.byProv.map(x=>+(x.ret/x.n*100).toFixed(2)),backgroundColor:C.ret}],
- {pct:true,tip:{label:c=>{const x=D.byProv[c.dataIndex],k=[x.kho,x.vc,x.ret][c.datasetIndex];return ' '+c.dataset.label+': '+p(k,x.n)+' ('+f(k)+' đơn)'}}}});
+ {pct:true,tip:{label:c=>{const x=D.byProv[c.dataIndex],k=[x.kho,x.vc,x.ret][c.datasetIndex];return ' '+c.dataset.label+': '+p(k,x.n)+' ('+f(k)+' đơn)'}}});
 document.getElementById('tProv').innerHTML='<tr><th>Đơn vị</th><th>Số đơn</th><th>Kho chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byProv.map(x=>`<tr><td>${x.p}</td><td>${f(x.n)}</td><td>${f(x.kho)} (${p(x.kho,x.n)})</td><td>${f(x.vc)} (${p(x.vc,x.n)})</td><td>${f(x.ret)} (${p(x.ret,x.n)})</td></tr>`).join('');
 const wh=D.topWh.map(x=>x.w.replace(/^SHOP - /,''));
-bar('cWh',wh,[{label:'Đơn đóng gói chậm',data:D.topWh.map(x=>x.k),backgroundColor:C.kho}],{horiz:true,tip:{label:c=>{const x=D.topWh[c.dataIndex];return ' '+f(x.k)+' đơn chậm / '+f(x.n)+' đơn ('+p(x.k,x.n)+')'}}}});
+bar('cWh',wh,[{label:'Đơn đóng gói chậm',data:D.topWh.map(x=>x.k),backgroundColor:C.kho}],{horiz:true,tip:{label:c=>{const x=D.topWh[c.dataIndex];return ' '+f(x.k)+' đơn chậm / '+f(x.n)+' đơn ('+p(x.k,x.n)+')'}}});
 const NP={'Processing / Chờ chuyển kho (IT)':'Chờ hàng chuyển từ kho khác','Picking / Chờ chuyển kho (IT)':'Chờ hàng chuyển từ kho khác','Processing / Other':'Đang xử lý – lý do khác','Processing / Không ghi lý do':'Đang xử lý – chưa ghi lý do','Picking / Không ghi lý do':'Đang lấy hàng trên kệ','Processing / No Answer':'Gọi khách không nghe máy','Pending / Waiting CS':'Chờ chăm sóc khách hàng xác nhận'};
 const np={}; D.np.forEach(([k,v])=>{const l=NP[k]||k;np[l]=(np[l]||0)+v}); const npE=Object.entries(np).sort((a,b)=>b[1]-a[1]);
 bar('cNp',npE.map(x=>x[0]),[{label:'Số đơn',data:npE.map(x=>x[1]),backgroundColor:C.kho}],{horiz:true,tip:{label:c=>' '+f(c.raw)+' đơn'}});
