@@ -6,7 +6,8 @@
 <title>Đơn POST tuần 21–27/9</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">document.fonts&&document.fonts.ready.then(()=>Object.values(Chart.instances).forEach(c=>c.update()));
+</script>
 <style>
 :root{color-scheme:light;--bg:#f6f6f4;--surface:#fcfcfb;--line:#e4e3de;--text:#1c1c1a;--muted:#5d5c57;--faint:#8a8983;
  --kho:#2a78d6;--vc:#eb6834;--ret:#1baf7a;--one:#2a78d6;}
@@ -99,17 +100,32 @@ ul.plain li{margin:4px 0}
 </div>
 
 <div class="card">
-<h2>Vì sao shop đóng gói chậm</h2>
-<p class="note">Toàn bộ <b id="rTot"></b> đơn shop đóng xong sau hơn 24 giờ (hoặc đến nay chưa đóng), chia theo lý do ghi trên hệ thống: ghi chú chờ phiếu chuyển hàng, lịch sử đổi shop xử lý, lý do trễ đã chọn.</p>
-<div class="chart"><canvas id="cReason"></canvas></div>
-</div>
-
-<div class="card">
 <h2>10 shop có nhiều đơn đóng gói chậm nhất</h2>
 <p class="note">Mỗi cột chia theo lý do chậm. Rê chuột vào từng phần để xem số đơn.</p>
 <div class="legend" id="lgReason"></div>
 <div class="chart tall"><canvas id="cTopKho"></canvas></div>
 <details><summary>Xem bảng số</summary><table id="tTopKho"></table></details>
+</div>
+
+<div class="card">
+<h2>Vì sao shop đóng gói chậm</h2>
+<p class="note">Toàn bộ <b id="rTot"></b> đơn shop đóng xong sau hơn 24 giờ (hoặc đến nay chưa đóng), chia theo lý do. Lý do lấy từ ghi chú chờ phiếu chuyển hàng, lịch sử đổi shop, lý do trễ đã chọn và lịch sử từng bước xử lý của đơn.</p>
+<div class="chart"><canvas id="cReason"></canvas></div>
+<details><summary>Giải thích từng lý do</summary><ul class="plain">
+<li><b>Đơn nằm chờ, shop chưa bắt đầu lấy hàng</b>: đơn không có ghi chú hay lý do trễ nào. Đơn cứ nằm ở trạng thái "Đang xử lý", quá 24 giờ shop mới bắt đầu lấy hàng (<b id="sChua"></b> đơn đến nay vẫn chưa bắt đầu).</li>
+<li><b>Đổi đơn vị vận chuyển</b>: đơn bị đổi từ Shopee Express sang Giao Hàng Nhanh trước khi đóng, phải chờ làm lại vận đơn.</li>
+<li><b>Lấy hàng / đóng gói lâu</b>: shop đã bắt đầu lấy hàng kịp nhưng lấy và đóng gói kéo dài.</li>
+<li><b>Chờ chuyển hàng từ kho khác</b>: shop thiếu hàng, có phiếu chuyển hàng (IT) từ kho khác về.</li>
+<li><b>Chuyển sang shop khác xử lý</b>: đơn bị chuyển từ shop này sang shop khác.</li>
+<li><b>Chờ xác nhận đơn</b>: chờ chăm sóc khách hàng gọi xác nhận, khách không nghe máy.</li>
+<li><b>Lý do khác</b>: shop có chọn lý do trễ trên hệ thống nhưng là lý do khác (không thuộc các nhóm trên).</li>
+</ul></details>
+</div>
+
+<div class="card">
+<h2>Đơn "không ghi lý do" chậm ở bước nào</h2>
+<p class="note">Tính trên <b id="sN"></b> đơn không ghi lý do đã đóng xong. Thời gian là mức ở giữa (một nửa số đơn nhanh hơn, một nửa chậm hơn). Gần như toàn bộ thời gian trễ là lúc đơn nằm chờ trước khi shop bắt đầu lấy hàng. Khi đã bắt đầu thì lấy hàng và đóng gói chỉ mất khoảng 1 giờ.</p>
+<div class="chart" style="height:220px"><canvas id="cStage"></canvas></div>
 </div>
 
 <div class="card">
@@ -159,13 +175,15 @@ const pv=D.byProv.map(x=>x.p);
 bar('cProv',pv,[{label:'Shop chậm',data:D.byProv.map(x=>+(x.kho/x.n*100).toFixed(2)),backgroundColor:C.kho},{label:'Vận chuyển chậm',data:D.byProv.map(x=>+(x.vc/x.n*100).toFixed(2)),backgroundColor:C.vc},{label:'Bị trả về',data:D.byProv.map(x=>+(x.ret/x.n*100).toFixed(2)),backgroundColor:C.ret}],
  {pct:true,tip:{label:c=>{const x=D.byProv[c.dataIndex],k=[x.kho,x.vc,x.ret][c.datasetIndex];return ' '+c.dataset.label+': '+p(k,x.n)+' ('+f(k)+' đơn)'}}});
 document.getElementById('tProv').innerHTML='<tr><th>Đơn vị</th><th>Số đơn</th><th>Shop chậm</th><th>Vận chuyển chậm</th><th>Bị trả về</th></tr>'+D.byProv.map(x=>`<tr><td>${x.p}</td><td>${f(x.n)}</td><td>${f(x.kho)} (${p(x.kho,x.n)})</td><td>${f(x.vc)} (${p(x.vc,x.n)})</td><td>${f(x.ret)} (${p(x.ret,x.n)})</td></tr>`).join('');
-const TOP={"CATS":["Chờ chuyển hàng từ kho khác","Chuyển sang shop khác xử lý","Chờ xác nhận đơn","Lý do khác","Không ghi lý do"],"reasonAll":[["Chờ chuyển hàng từ kho khác",460],["Chuyển sang shop khác xử lý",287],["Chờ xác nhận đơn",35],["Lý do khác",50],["Không ghi lý do",564]],"topVol":[{"w":"170 QUOC LO 1A","n":1428,"kho":508,"vc":0},{"w":"71 TRAN HUNG DAO","n":240,"kho":5,"vc":0},{"w":"11 QUANG TRUNG","n":234,"kho":3,"vc":0},{"w":"174 PHAN DINH PHUNG","n":192,"kho":1,"vc":0},{"w":"277 TRAN HUNG DAO","n":177,"kho":0,"vc":0},{"w":"199 HUNG VUONG","n":172,"kho":10,"vc":0},{"w":"517 PHU LOI","n":167,"kho":68,"vc":0},{"w":"295 GIAI PHONG","n":162,"kho":2,"vc":0},{"w":"212 LE LOI","n":158,"kho":0,"vc":0},{"w":"113 LUONG KHANH THIEN","n":152,"kho":6,"vc":0}],"topVc":[{"w":"461 TRUONG DINH","k":31,"n":58},{"w":"1 22 THANG 12","k":26,"n":122},{"w":"34 DT 746","k":23,"n":147},{"w":"2857 LUONG DINH CUA","k":18,"n":62},{"w":"1297 HUNG VUONG","k":13,"n":38},{"w":"553 DT 767","k":13,"n":33},{"w":"182 PHAN DANG LUU","k":13,"n":47},{"w":"5 TRAN HUNG DAO","k":12,"n":73},{"w":"276 QUANG TRUNG","k":12,"n":122},{"w":"78 DT 835","k":12,"n":43}],"topKho":[{"w":"170 QUOC LO 1A","k":508,"n":1428,"by":[229,14,13,0,252]},{"w":"517 PHU LOI","k":68,"n":167,"by":[8,54,4,0,2]},{"w":"79 XUAN LA","k":65,"n":142,"by":[1,2,0,50,12]},{"w":"75 DONG KHOI","k":58,"n":133,"by":[5,7,0,0,46]},{"w":"594 NGUYEN VAN CU","k":48,"n":98,"by":[2,12,0,0,34]},{"w":"459 NGUYEN DANG","k":48,"n":100,"by":[0,1,0,0,47]},{"w":"240 TINH LO 825","k":40,"n":90,"by":[0,1,0,0,39]},{"w":"137 NGUYEN TRAI","k":33,"n":84,"by":[0,8,0,0,25]},{"w":"477 LE VAN THO","k":32,"n":73,"by":[20,7,0,0,5]},{"w":"33 LE XOAY","k":22,"n":73,"by":[0,8,0,0,14]}]};
+const TOP={"CATS":["Chờ chuyển hàng từ kho khác","Chuyển sang shop khác xử lý","Chờ xác nhận đơn","Lý do khác","Đổi đơn vị vận chuyển","Đơn nằm chờ, shop chưa bắt đầu lấy hàng","Lấy hàng / đóng gói lâu"],"reasonAll":[["Đơn nằm chờ, shop chưa bắt đầu lấy hàng",511],["Chờ chuyển hàng từ kho khác",460],["Chuyển sang shop khác xử lý",287],["Lý do khác",50],["Đổi đơn vị vận chuyển",39],["Chờ xác nhận đơn",35],["Lấy hàng / đóng gói lâu",14]],"topVol":[{"w":"170 QUOC LO 1A","n":1428,"kho":508,"vc":0},{"w":"71 TRAN HUNG DAO","n":240,"kho":5,"vc":0},{"w":"11 QUANG TRUNG","n":234,"kho":3,"vc":0},{"w":"174 PHAN DINH PHUNG","n":192,"kho":1,"vc":0},{"w":"277 TRAN HUNG DAO","n":177,"kho":0,"vc":0},{"w":"199 HUNG VUONG","n":172,"kho":10,"vc":0},{"w":"517 PHU LOI","n":167,"kho":68,"vc":0},{"w":"295 GIAI PHONG","n":162,"kho":2,"vc":0},{"w":"212 LE LOI","n":158,"kho":0,"vc":0},{"w":"113 LUONG KHANH THIEN","n":152,"kho":6,"vc":0}],"topVc":[{"w":"461 TRUONG DINH","k":31,"n":58},{"w":"1 22 THANG 12","k":26,"n":122},{"w":"34 DT 746","k":23,"n":147},{"w":"2857 LUONG DINH CUA","k":18,"n":62},{"w":"1297 HUNG VUONG","k":13,"n":38},{"w":"553 DT 767","k":13,"n":33},{"w":"182 PHAN DANG LUU","k":13,"n":47},{"w":"5 TRAN HUNG DAO","k":12,"n":73},{"w":"276 QUANG TRUNG","k":12,"n":122},{"w":"78 DT 835","k":12,"n":43}],"topKho":[{"w":"170 QUOC LO 1A","k":508,"n":1428,"by":[229,14,13,0,3,237,12]},{"w":"517 PHU LOI","k":68,"n":167,"by":[8,54,4,0,0,2,0]},{"w":"79 XUAN LA","k":65,"n":142,"by":[1,2,0,50,0,12,0]},{"w":"75 DONG KHOI","k":58,"n":133,"by":[5,7,0,0,16,30,0]},{"w":"594 NGUYEN VAN CU","k":48,"n":98,"by":[2,12,0,0,13,21,0]},{"w":"459 NGUYEN DANG","k":48,"n":100,"by":[0,1,0,0,0,47,0]},{"w":"240 TINH LO 825","k":40,"n":90,"by":[0,1,0,0,0,39,0]},{"w":"137 NGUYEN TRAI","k":33,"n":84,"by":[0,8,0,0,1,24,0]},{"w":"477 LE VAN THO","k":32,"n":73,"by":[20,7,0,0,0,5,0]},{"w":"33 LE XOAY","k":22,"n":73,"by":[0,8,0,0,0,14,0]}],"stage":{"n":543,"cho":27.7,"lay":0.5,"dong":0.5,"chuaLay":15}};
 const sn=w=>w.replace(/^SHOP - /,'');
-const RC=['#1baf7a','#eda100','#e87ba4','#4a3aa7','#a3a29a'];
+const RC=['#1baf7a','#eda100','#e87ba4','#4a3aa7','#eb6834','#2a78d6','#008300'];
 bar('cTopVol',TOP.topVol.map(x=>sn(x.w)),[{label:'Số đơn',data:TOP.topVol.map(x=>x.n),backgroundColor:C.one}],{horiz:true,tip:{label:c=>{const x=TOP.topVol[c.dataIndex];return [' '+f(x.n)+' đơn',' Shop chậm: '+f(x.kho)+' ('+p(x.kho,x.n)+')',' Vận chuyển chậm: '+f(x.vc)+' ('+p(x.vc,x.n)+')']}}});
 document.getElementById('tTopVol').innerHTML='<tr><th>Shop</th><th>Số đơn</th><th>Shop chậm</th><th>Vận chuyển chậm</th></tr>'+TOP.topVol.map(x=>`<tr><td>${sn(x.w)}</td><td>${f(x.n)}</td><td>${f(x.kho)} (${p(x.kho,x.n)})</td><td>${f(x.vc)} (${p(x.vc,x.n)})</td></tr>`).join('');
 bar('cTopVc',TOP.topVc.map(x=>sn(x.w)),[{label:'Đơn vận chuyển chậm',data:TOP.topVc.map(x=>x.k),backgroundColor:C.vc}],{horiz:true,tip:{label:c=>{const x=TOP.topVc[c.dataIndex];return ' '+f(x.k)+' đơn chậm / '+f(x.n)+' đơn ('+p(x.k,x.n)+')'}}});
 document.getElementById('tTopVc').innerHTML='<tr><th>Shop</th><th>Số đơn</th><th>Vận chuyển chậm</th></tr>'+TOP.topVc.map(x=>`<tr><td>${sn(x.w)}</td><td>${f(x.n)}</td><td>${f(x.k)} (${p(x.k,x.n)})</td></tr>`).join('');
+document.getElementById('sChua').textContent=f(TOP.stage.chuaLay); document.getElementById('sN').textContent=f(TOP.stage.n);
+bar('cStage',['Chờ shop bắt đầu lấy hàng','Lấy hàng','Đóng gói'],[{label:'Giờ',data:[TOP.stage.cho,TOP.stage.lay,TOP.stage.dong],backgroundColor:C.kho}],{horiz:true,tip:{label:c=>' '+hrs(c.raw)}});
 const rTot=TOP.reasonAll.reduce((s,x)=>s+x[1],0); document.getElementById('rTot').textContent=f(rTot);
 bar('cReason',TOP.reasonAll.map(x=>x[0]),[{label:'Số đơn',data:TOP.reasonAll.map(x=>x[1]),backgroundColor:TOP.reasonAll.map(x=>RC[TOP.CATS.indexOf(x[0])])}],{horiz:true,tip:{label:c=>' '+f(c.raw)+' đơn ('+p(c.raw,rTot)+')'}});
 document.getElementById('lgReason').innerHTML=TOP.CATS.map((k,i)=>`<span><i style="background:${RC[i]}"></i>${k}</span>`).join('');
@@ -175,6 +193,7 @@ document.getElementById('tTopKho').innerHTML='<tr><th>Shop</th><th>Số đơn</t
 const RG={waiting_to_return:'Giao không được, chờ trả về',return:'Đang trên đường trả về',Returning:'Đang trên đường trả về',returning:'Đang trên đường trả về',return_transporting:'Đang trên đường trả về',Returned:'Đã trả về kho',returned:'Đã trả về kho'};
 const rg={}; D.ret2.forEach(([k,v])=>{const l=RG[k]||'Khác';rg[l]=(rg[l]||0)+v}); const rgE=['Giao không được, chờ trả về','Đang trên đường trả về','Đã trả về kho'].map(k=>[k,rg[k]||0]);
 bar('cRet',rgE.map(x=>x[0]),[{label:'Số đơn',data:rgE.map(x=>x[1]),backgroundColor:C.ret}],{tip:{label:c=>' '+f(c.raw)+' đơn'}});
+document.fonts&&document.fonts.ready.then(()=>Object.values(Chart.instances).forEach(c=>c.update()));
 </script>
 </body>
 </html>
