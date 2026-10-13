@@ -88,19 +88,19 @@ tr.tot td{font-weight:600}
 <div class="tbl"><table id="tFail"></table></div>
 </div>
 
-<p class="foot">Nguồn: OMS (trạng thái đơn, lý do delay), WMS (cờ đủ UID), web Shopee Express và cổng khách hàng GHN (tình trạng lấy hàng). Cùng số liệu với file <i>BaoCaoPost_01-10_den_13-10_v2.xlsx</i>. Không tính đơn đã huỷ.</p>
+<p class="foot">Nguồn: OMS (trạng thái đơn, lý do delay), WMS (cờ đủ UID), web Shopee Express và cổng khách hàng GHN (tình trạng lấy hàng). Lấy từ file <i>BaoCaoPost_01-10_den_13-10_v2.xlsx</i>, không tính đơn đã huỷ, và bỏ ra ngoài 19 đơn cần kiểm tra riêng (12 đơn vận đơn ĐVVC đã huỷ, 7 đơn không có trong danh sách chờ lấy hàng của WMS).</p>
 </div>
 <script>
 const D = {
- "T": 34819,
- "d7": 83,
+ "T": 34800,
+ "d7": 80,
  "nShops": 304,
  "K": {
   "shop": 20955,
   "hang": 7674,
-  "dvvc": 6049,
+  "dvvc": 6037,
   "cs": 134,
-  "khac": 7
+  "khac": 0
  },
  "causes": [
   {
@@ -116,13 +116,13 @@ const D = {
    "k": "hang"
   },
   {
-   "name": "ĐVVC đến lấy nhưng không thành công, đang chờ lấy lại",
-   "n": 3531,
+   "name": "Đơn Packed chưa lấy thành công",
+   "n": 4640,
    "d7": 2,
    "k": "dvvc"
   },
   {
-   "name": "Shop đang lấy hàng / đóng gói dở",
+   "name": "Shop đang lấy hàng / picking",
    "n": 1981,
    "d7": 2,
    "k": "shop"
@@ -131,12 +131,6 @@ const D = {
    "name": "Shop đã đóng gói, ĐVVC chưa đến lấy",
    "n": 1397,
    "d7": 2,
-   "k": "dvvc"
-  },
-  {
-   "name": "ĐVVC đang đến lấy lần đầu",
-   "n": 1109,
-   "d7": 0,
    "k": "dvvc"
   },
   {
@@ -162,18 +156,6 @@ const D = {
    "n": 64,
    "d7": 2,
    "k": "cs"
-  },
-  {
-   "name": "Vận đơn bên ĐVVC đã bị huỷ, cần tạo lại",
-   "n": 12,
-   "d7": 1,
-   "k": "dvvc"
-  },
-  {
-   "name": "Chưa có trong danh sách chờ lấy hàng (Picklisted) của WMS",
-   "n": 7,
-   "d7": 2,
-   "k": "khac"
   }
  ],
  "uid": {
@@ -244,11 +226,11 @@ const D = {
    ]
   },
   "qua": {
-   "n": 8414,
+   "n": 8395,
    "by": [
     [
      "Packed",
-     6046
+     6034
     ],
     [
      "Picked",
@@ -265,10 +247,6 @@ const D = {
     [
      "Packing",
      9
-    ],
-    [
-     "Processing chua co tren WMS",
-     7
     ],
     [
      "Waiting CS",
@@ -288,34 +266,34 @@ const D = {
  "top": [
   {
    "name": "170 QUOC LO 1A",
-   "n": 4190,
-   "d7": 3,
+   "n": 4187,
+   "d7": 1,
    "du": 1292,
    "thieu": 811,
-   "qua": 2087,
+   "qua": 2084,
    "k": {
     "shop": 2950,
     "hang": 993,
-    "dvvc": 239,
+    "dvvc": 238,
     "cs": 6,
-    "khac": 2
+    "khac": 0
    },
    "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
    "mainN": 1101
   },
   {
    "name": "79 XUAN LA",
-   "n": 627,
+   "n": 626,
    "d7": 2,
    "du": 306,
    "thieu": 45,
-   "qua": 276,
+   "qua": 275,
    "k": {
     "shop": 306,
     "hang": 44,
     "dvvc": 273,
     "cs": 3,
-    "khac": 1
+    "khac": 0
    },
    "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
    "mainN": 305
@@ -470,7 +448,7 @@ const D = {
     "cs": 1,
     "khac": 0
    },
-   "main": "ĐVVC đến lấy nhưng không thành công, đang chờ lấy lại",
+   "main": "Đơn Packed chưa lấy thành công",
    "mainN": 181
   },
   {
@@ -568,15 +546,15 @@ const D = {
    18
   ]
  ],
- "packedN": 6049,
+ "packedN": 6037,
  "dvvc": {
-  "Shopee Express": 2878,
-  "Giao Hàng Nhanh": 3171
+  "Shopee Express": 2877,
+  "Giao Hàng Nhanh": 3160
  },
  "byDay": {
-  "Trước 9/10": 131,
-  "09/10": 359,
-  "10/10": 34329
+  "Trước 9/10": 128,
+  "09/10": 355,
+  "10/10": 34317
  },
  "failN": 3531
 };
