@@ -610,10 +610,10 @@ const UL = { du: ['Đủ UID', '--du', 'Shop có đủ hàng nhưng chưa lấy 
 document.getElementById('uSplit').innerHTML = ['du', 'thieu', 'qua'].map(k => `<div style="width:${D.uid[k].n * 100 / T}%;background:var(${UL[k][1]})">${p(D.uid[k].n, T)}</div>`).join('');
 document.getElementById('uid').innerHTML = ['du', 'thieu', 'qua'].map(k => `<div class="box"><h3><span class="dot" style="background:var(${UL[k][1]})"></span>${UL[k][0]}</h3><div class="big">${f(D.uid[k].n)}</div><div style="font-size:14px;color:var(--muted)">${UL[k][2]}</div><ul>${D.uid[k].by.slice(0, 6).map(([s, v]) => `<li>${s}: <b>${f(v)}</b></li>`).join('')}</ul></div>`).join('');
 
-const top = D.top, tsum = top.reduce((a, b) => a + b.n, 0);
-document.getElementById('topNote').innerHTML = `15 shop này chiếm <b>${f(tsum)}</b> đơn (${p(tsum, T)} tổng đơn treo). Riêng <b>${top[0].name}</b> có ${f(top[0].n)} đơn, nhiều gấp ${Math.round(top[0].n / top[1].n)} lần shop đứng thứ hai.`;
+const TOP = D.top, tsum = TOP.reduce((a, b) => a + b.n, 0);
+document.getElementById('topNote').innerHTML = `15 shop này chiếm <b>${f(tsum)}</b> đơn (${p(tsum, T)} tổng đơn treo). Riêng <b>${TOP[0].name}</b> có ${f(TOP[0].n)} đơn, nhiều gấp ${Math.round(TOP[0].n / TOP[1].n)} lần shop đứng thứ hai.`;
 document.getElementById('tTop').innerHTML = '<tr><th>#</th><th class="l">Shop</th><th>Đơn treo</th><th>Đủ UID</th><th>Không đủ UID</th><th>Đã qua lấy hàng</th><th>Treo từ 7 ngày</th><th class="l">Nguyên nhân chính</th></tr>' +
-  top.map((t, i) => `<tr><td>${i + 1}</td><td class="l">${t.name}</td><td><b>${f(t.n)}</b></td><td>${f(t.du)}</td><td>${f(t.thieu)}</td><td>${f(t.qua)}</td><td>${t.d7 || '–'}</td><td class="l">${t.main} <span style="color:var(--muted)">(${p(t.mainN, t.n)})</span></td></tr>`).join('');
+  TOP.map((t, i) => `<tr><td>${i + 1}</td><td class="l">${t.name}</td><td><b>${f(t.n)}</b></td><td>${f(t.du)}</td><td>${f(t.thieu)}</td><td>${f(t.qua)}</td><td>${t.d7 || '–'}</td><td class="l">${t.main} <span style="color:var(--muted)">(${p(t.mainN, t.n)})</span></td></tr>`).join('');
 
 const fl = D.fails;
 document.getElementById('failNote').innerHTML = `Trong ${f(D.packedN)} đơn đã đóng gói đang chờ ĐVVC, <b>${f(D.failN)}</b> đơn ĐVVC đã đến lấy ít nhất 1 lần nhưng không lấy được. Lý do lấy theo lần thất bại gần nhất. Shopee Express có ghi lý do; cổng GHN không trả lý do.`;
@@ -628,10 +628,10 @@ function charts() {
       scales: { x: { ticks: { callback: (v) => f(v) } }, y: { grid: { display: false }, ticks: { autoSkip: false, callback: function (v) { const s = this.getLabelForValue(v); return window.innerWidth < 600 && s.length > 30 ? s.slice(0, 28) + '…' : s; } } } } }
   });
   new Chart(document.getElementById('cTop'), {
-    type: 'bar', data: { labels: top.map(t => t.name), datasets: [
-      { label: 'Đủ UID', data: top.map(t => t.du), backgroundColor: css('--du') },
-      { label: 'Không đủ UID', data: top.map(t => t.thieu), backgroundColor: css('--thieu') },
-      { label: 'Đã qua lấy hàng', data: top.map(t => t.qua), backgroundColor: css('--qua') }] },
+    type: 'bar', data: { labels: TOP.map(t => t.name), datasets: [
+      { label: 'Đủ UID', data: TOP.map(t => t.du), backgroundColor: css('--du') },
+      { label: 'Không đủ UID', data: TOP.map(t => t.thieu), backgroundColor: css('--thieu') },
+      { label: 'Đã qua lấy hàng', data: TOP.map(t => t.qua), backgroundColor: css('--qua') }] },
     options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { mode: 'index', callbacks: { label: (x) => x.dataset.label + ': ' + f(x.raw) } } },
       scales: { x: { stacked: true, ticks: { callback: (v) => f(v) } }, y: { stacked: true, grid: { display: false }, ticks: { autoSkip: false } } } }
   });
