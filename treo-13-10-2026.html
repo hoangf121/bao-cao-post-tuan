@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đơn POST treo 13/10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{color-scheme:light;--bg:#f6f6f4;--surface:#fcfcfb;--line:#e4e3de;--text:#1c1c1a;--muted:#5d5c57;--faint:#8a8983;
+ --shop:#2a78d6;--hang:#9a6bd1;--dvvc:#eb6834;--cs:#8a8983;--du:#1baf7a;--thieu:#d64545;--qua:#b9b8b1;--warn:#fff4d6;--warnline:#f0d78c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#121211;--surface:#1a1a19;--line:#2f2f2c;--text:#f3f2ee;--muted:#c3c2b7;--faint:#8f8e86;
+ --shop:#3987e5;--hang:#a97ee0;--dvvc:#d95926;--cs:#8f8e86;--du:#199e70;--thieu:#e05a5a;--qua:#55544f;--warn:#2e2814;--warnline:#5c4f22}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121211;--surface:#1a1a19;--line:#2f2f2c;--text:#f3f2ee;--muted:#c3c2b7;--faint:#8f8e86;
+ --shop:#3987e5;--hang:#a97ee0;--dvvc:#d95926;--cs:#8f8e86;--du:#199e70;--thieu:#e05a5a;--qua:#55544f;--warn:#2e2814;--warnline:#5c4f22}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Be Vietnam Pro",system-ui,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 16px 60px}
+h1{font-size:28px;line-height:1.25;margin:0 0 6px}
+h2{font-size:20px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px}
+.alert{background:var(--warn);border:1px solid var(--warnline);border-radius:12px;padding:12px 16px;margin:0 0 22px;font-size:15px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:24px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.tile .k{font-size:14px;color:var(--muted)}
+.tile .v{font-size:32px;font-weight:700;line-height:1.2;margin:4px 0;font-variant-numeric:tabular-nums}
+.tile .n{font-size:14px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 12px;margin-bottom:18px}
+.card p.note{color:var(--muted);margin:2px 0 12px;font-size:15px}
+.chart{position:relative;height:320px}
+.chart.tall{height:520px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:0 0 8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.split{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:6px 0 10px}
+.split div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:6px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child,td.l,th.l{text-align:left}
+th{color:var(--muted);font-weight:500}
+tr.tot td{font-weight:600}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.box{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.box h3{margin:0 0 2px;font-size:16px}
+.box .big{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.box ul{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
+.foot{color:var(--faint);font-size:13px;margin-top:28px}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;color:#fff;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Đơn POST đang treo – ngày 13/10/2026</h1>
+<p class="sub">Đơn Hasaki giao qua Giao Hàng Nhanh, Shopee Express, Giao Hàng Tiết Kiệm, <b>chưa giao được cho đơn vị vận chuyển (ĐVVC) sau từ 3 ngày trở lên</b>, tính từ ngày khách đặt đến 13/10. Số liệu lấy sáng 13/10/2026.</p>
+<div class="alert" id="alert"></div>
+<div class="tiles" id="tiles"></div>
+
+<div class="card">
+<h2>Đơn trễ do đâu</h2>
+<p class="note">Mỗi đơn được xếp vào <b>một</b> nguyên nhân theo bước nó đang kẹt.</p>
+<div class="split" id="split"></div>
+<div class="legend" id="kLegend"></div>
+<div class="chart" id="causeBox"><canvas id="cCause"></canvas></div>
+<div class="tbl"><table id="tCause"></table></div>
+</div>
+
+<div class="card">
+<h2>Đủ UID / không đủ UID</h2>
+<p class="note"><b>UID</b> là mã từng sản phẩm trong shop. Hệ thống kho (WMS) đánh dấu đơn <b>đủ UID</b> khi shop đã có đủ hàng để lấy đi đóng gói.<br>
+Đơn đã lấy hàng, đã đóng gói hoặc đang chờ ĐVVC thì không còn xét UID nữa.</p>
+<div class="split" id="uSplit"></div>
+<div class="grid3" id="uid"></div>
+</div>
+
+<div class="card">
+<h2>Top 15 shop có nhiều đơn treo nhất</h2>
+<p class="note" id="topNote"></p>
+<div class="legend"><span><i style="background:var(--du)"></i>Đủ UID, chưa lấy hàng</span><span><i style="background:var(--thieu)"></i>Không đủ UID</span><span><i style="background:var(--qua)"></i>Đã qua bước lấy hàng (đang đóng gói / chờ ĐVVC)</span></div>
+<div class="chart tall"><canvas id="cTop"></canvas></div>
+<div class="tbl"><table id="tTop"></table></div>
+</div>
+
+<div class="card">
+<h2>ĐVVC đến lấy mà không lấy được – lý do</h2>
+<p class="note" id="failNote"></p>
+<div class="tbl"><table id="tFail"></table></div>
+</div>
+
+<p class="foot">Nguồn: OMS (trạng thái đơn, lý do delay), WMS (cờ đủ UID), web Shopee Express và cổng khách hàng GHN (tình trạng lấy hàng). Cùng số liệu với file <i>BaoCaoPost_01-10_den_13-10_v2.xlsx</i>. Không tính đơn đã huỷ.</p>
+</div>
+<script>
+const D = {
+ "T": 34819,
+ "d7": 83,
+ "nShops": 304,
+ "K": {
+  "shop": 20955,
+  "hang": 7674,
+  "dvvc": 6049,
+  "cs": 134,
+  "khac": 7
+ },
+ "causes": [
+  {
+   "name": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "n": 18077,
+   "d7": 3,
+   "k": "shop"
+  },
+  {
+   "name": "Chờ chuyển hàng từ kho/shop khác về (Waiting IT)",
+   "n": 7463,
+   "d7": 1,
+   "k": "hang"
+  },
+  {
+   "name": "ĐVVC đến lấy nhưng không thành công, đang chờ lấy lại",
+   "n": 3531,
+   "d7": 2,
+   "k": "dvvc"
+  },
+  {
+   "name": "Shop đang lấy hàng / đóng gói dở",
+   "n": 1981,
+   "d7": 2,
+   "k": "shop"
+  },
+  {
+   "name": "Shop đã đóng gói, ĐVVC chưa đến lấy",
+   "n": 1397,
+   "d7": 2,
+   "k": "dvvc"
+  },
+  {
+   "name": "ĐVVC đang đến lấy lần đầu",
+   "n": 1109,
+   "d7": 0,
+   "k": "dvvc"
+  },
+  {
+   "name": "Đã đóng gói xong, chưa giao cho ĐVVC",
+   "n": 897,
+   "d7": 0,
+   "k": "shop"
+  },
+  {
+   "name": "Thiếu hàng tại shop (không đủ UID)",
+   "n": 211,
+   "d7": 0,
+   "k": "hang"
+  },
+  {
+   "name": "Đang chờ huỷ đơn",
+   "n": 70,
+   "d7": 68,
+   "k": "cs"
+  },
+  {
+   "name": "Chờ CSKH / khách xác nhận",
+   "n": 64,
+   "d7": 2,
+   "k": "cs"
+  },
+  {
+   "name": "Vận đơn bên ĐVVC đã bị huỷ, cần tạo lại",
+   "n": 12,
+   "d7": 1,
+   "k": "dvvc"
+  },
+  {
+   "name": "Đơn chưa được đẩy sang hệ thống kho",
+   "n": 7,
+   "d7": 2,
+   "k": "khac"
+  }
+ ],
+ "uid": {
+  "du": {
+   "n": 19973,
+   "by": [
+    [
+     "Processing",
+     18077
+    ],
+    [
+     "Chờ chuyển hàng (Waiting IT)",
+     1431
+    ],
+    [
+     "Picking",
+     409
+    ],
+    [
+     "Waiting Confirm",
+     42
+    ],
+    [
+     "Picked",
+     9
+    ],
+    [
+     "Waiting Reply",
+     2
+    ],
+    [
+     "Packed",
+     2
+    ],
+    [
+     "No Answer",
+     1
+    ]
+   ]
+  },
+  "thieu": {
+   "n": 6432,
+   "by": [
+    [
+     "Chờ chuyển hàng (Waiting IT)",
+     6030
+    ],
+    [
+     "Processing",
+     211
+    ],
+    [
+     "Picking",
+     179
+    ],
+    [
+     "No Answer",
+     6
+    ],
+    [
+     "Waiting Confirm",
+     5
+    ],
+    [
+     "Packed",
+     1
+    ]
+   ]
+  },
+  "qua": {
+   "n": 8414,
+   "by": [
+    [
+     "Packed",
+     6046
+    ],
+    [
+     "Picked",
+     1375
+    ],
+    [
+     "Ready to ship",
+     897
+    ],
+    [
+     "Waiting Cancel",
+     70
+    ],
+    [
+     "Packing",
+     9
+    ],
+    [
+     "Processing chua co tren WMS",
+     7
+    ],
+    [
+     "Waiting CS",
+     7
+    ],
+    [
+     "Chờ chuyển hàng (Waiting IT)",
+     2
+    ],
+    [
+     "Waiting Confirm",
+     1
+    ]
+   ]
+  }
+ },
+ "top": [
+  {
+   "name": "170 QUOC LO 1A",
+   "n": 4190,
+   "d7": 3,
+   "du": 1292,
+   "thieu": 811,
+   "qua": 2087,
+   "k": {
+    "shop": 2950,
+    "hang": 993,
+    "dvvc": 239,
+    "cs": 6,
+    "khac": 2
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 1101
+  },
+  {
+   "name": "79 XUAN LA",
+   "n": 627,
+   "d7": 2,
+   "du": 306,
+   "thieu": 45,
+   "qua": 276,
+   "k": {
+    "shop": 306,
+    "hang": 44,
+    "dvvc": 273,
+    "cs": 3,
+    "khac": 1
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 305
+  },
+  {
+   "name": "2857 LUONG DINH CUA",
+   "n": 619,
+   "d7": 0,
+   "du": 452,
+   "thieu": 75,
+   "qua": 92,
+   "k": {
+    "shop": 453,
+    "hang": 74,
+    "dvvc": 92,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 416
+  },
+  {
+   "name": "402 LE DUC THO",
+   "n": 592,
+   "d7": 0,
+   "du": 592,
+   "thieu": 0,
+   "qua": 0,
+   "k": {
+    "shop": 591,
+    "hang": 1,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 591
+  },
+  {
+   "name": "112 TRAN NAO",
+   "n": 531,
+   "d7": 0,
+   "du": 531,
+   "thieu": 0,
+   "qua": 0,
+   "k": {
+    "shop": 531,
+    "hang": 0,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 531
+  },
+  {
+   "name": "276 QUANG TRUNG",
+   "n": 529,
+   "d7": 0,
+   "du": 505,
+   "thieu": 24,
+   "qua": 0,
+   "k": {
+    "shop": 505,
+    "hang": 24,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 504
+  },
+  {
+   "name": "1207 NGUYEN DUY TRINH",
+   "n": 515,
+   "d7": 0,
+   "du": 311,
+   "thieu": 144,
+   "qua": 60,
+   "k": {
+    "shop": 270,
+    "hang": 185,
+    "dvvc": 60,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 270
+  },
+  {
+   "name": "276 XO VIET NGHE TINH",
+   "n": 498,
+   "d7": 0,
+   "du": 498,
+   "thieu": 0,
+   "qua": 0,
+   "k": {
+    "shop": 498,
+    "hang": 0,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 498
+  },
+  {
+   "name": "246 DUONG BA TRAC",
+   "n": 492,
+   "d7": 0,
+   "du": 492,
+   "thieu": 0,
+   "qua": 0,
+   "k": {
+    "shop": 492,
+    "hang": 0,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 492
+  },
+  {
+   "name": "919 HAU GIANG",
+   "n": 464,
+   "d7": 0,
+   "du": 464,
+   "thieu": 0,
+   "qua": 0,
+   "k": {
+    "shop": 464,
+    "hang": 0,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 464
+  },
+  {
+   "name": "34 DT 746",
+   "n": 434,
+   "d7": 1,
+   "du": 176,
+   "thieu": 50,
+   "qua": 208,
+   "k": {
+    "shop": 165,
+    "hang": 61,
+    "dvvc": 207,
+    "cs": 1,
+    "khac": 0
+   },
+   "main": "ĐVVC đến lấy nhưng không thành công, đang chờ lấy lại",
+   "mainN": 181
+  },
+  {
+   "name": "104 LE TRONG TAN",
+   "n": 423,
+   "d7": 0,
+   "du": 423,
+   "thieu": 0,
+   "qua": 0,
+   "k": {
+    "shop": 423,
+    "hang": 0,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 423
+  },
+  {
+   "name": "219 NGUYEN THI THAP",
+   "n": 412,
+   "d7": 0,
+   "du": 412,
+   "thieu": 0,
+   "qua": 0,
+   "k": {
+    "shop": 412,
+    "hang": 0,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 412
+  },
+  {
+   "name": "420 HUYNH TAN PHAT",
+   "n": 410,
+   "d7": 0,
+   "du": 410,
+   "thieu": 0,
+   "qua": 0,
+   "k": {
+    "shop": 410,
+    "hang": 0,
+    "dvvc": 0,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 410
+  },
+  {
+   "name": "199 HUNG VUONG",
+   "n": 357,
+   "d7": 0,
+   "du": 266,
+   "thieu": 52,
+   "qua": 39,
+   "k": {
+    "shop": 263,
+    "hang": 55,
+    "dvvc": 39,
+    "cs": 0,
+    "khac": 0
+   },
+   "main": "Đủ hàng (đủ UID) nhưng shop chưa xử lý",
+   "mainN": 262
+  }
+ ],
+ "fails": [
+  [
+   "GHN (hệ thống GHN không ghi lý do)",
+   1988
+  ],
+  [
+   "Không lấy kịp",
+   779
+  ],
+  [
+   "Người gửi hẹn lại ngày lấy",
+   549
+  ],
+  [
+   "Không liên hệ được người gửi",
+   174
+  ],
+  [
+   "Đơn hàng được lấy bởi tài xế khác/ sai tuyến lấy",
+   23
+  ],
+  [
+   "Đóng gói chưa đảm bảo",
+   18
+  ]
+ ],
+ "packedN": 6049,
+ "dvvc": {
+  "Shopee Express": 2878,
+  "Giao Hàng Nhanh": 3171
+ },
+ "byDay": {
+  "Trước 9/10": 131,
+  "09/10": 359,
+  "10/10": 34329
+ },
+ "failN": 3531
+};
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const f = (n) => n.toLocaleString('vi-VN');
+const p = (n, t) => (Math.round(n * 1000 / t) / 10).toLocaleString('vi-VN') + '%';
+const KH = { shop: ['Shop chưa xử lý xong', '--shop'], hang: ['Thiếu / chờ hàng', '--hang'], dvvc: ['ĐVVC chưa lấy được hàng', '--dvvc'], cs: ['Chờ CSKH / huỷ', '--cs'], khac: ['Khác', '--cs'] };
+const T = D.T;
+
+document.getElementById('alert').innerHTML = `<b>${p(D.byDay['10/10'] || 0, T)}</b> số đơn treo (${f(D.byDay['10/10'] || 0)} đơn) là đơn đặt ngày <b>10/10</b> (đợt sale 10.10), hôm nay vừa đủ 3 ngày. Đơn 9/10: ${f(D.byDay['09/10'] || 0)}; trước 9/10: ${f(D.byDay['Trước 9/10'] || 0)}.`;
+
+const tiles = [
+  ['Đơn treo từ 3 ngày', f(T), `trong đó ${f(D.d7)} đơn treo từ 7 ngày · ${D.nShops} shop`, '--text'],
+  ['Đủ UID nhưng chưa lấy hàng', f(D.uid.du.n), p(D.uid.du.n, T) + ' số đơn treo', '--du'],
+  ['Không đủ UID', f(D.uid.thieu.n), p(D.uid.thieu.n, T) + ' · thiếu hàng hoặc chờ chuyển hàng', '--thieu'],
+  ['Đã đóng gói, chờ ĐVVC lấy', f(D.packedN), Object.entries(D.dvvc).map(([k, v]) => k + ' ' + f(v)).join(' · '), '--dvvc'],
+];
+document.getElementById('tiles').innerHTML = tiles.map(([k, v, n, c]) => `<div class="tile"><div class="k"><span class="dot" style="background:var(${c})"></span>${k}</div><div class="v">${v}</div><div class="n">${n}</div></div>`).join('');
+
+const ks = Object.entries(D.K).filter(([, v]) => v > 0).sort((a, b) => b[1] - a[1]);
+document.getElementById('split').innerHTML = ks.map(([k, v]) => `<div style="width:${v * 100 / T}%;background:var(${KH[k][1]})" title="${KH[k][0]}: ${f(v)}">${v / T > .08 ? p(v, T) : ''}</div>`).join('');
+document.getElementById('kLegend').innerHTML = ks.map(([k, v]) => `<span><i style="background:var(${KH[k][1]})"></i>${KH[k][0]}: <b>${f(v)}</b> (${p(v, T)})</span>`).join('');
+
+const cs = D.causes;
+document.getElementById('causeBox').style.height = Math.max(280, cs.length * 34 + 40) + 'px';
+document.getElementById('tCause').innerHTML = '<tr><th>Nguyên nhân</th><th class="l">Thuộc khâu</th><th>Số đơn</th><th>% đơn treo</th><th>Treo từ 7 ngày</th></tr>' +
+  cs.map(c => `<tr><td>${c.name}</td><td class="l"><span class="tag" style="background:var(${KH[c.k][1]})">${KH[c.k][0]}</span></td><td>${f(c.n)}</td><td>${p(c.n, T)}</td><td>${c.d7 ? f(c.d7) : '–'}</td></tr>`).join('') +
+  `<tr class="tot"><td>Tổng</td><td></td><td>${f(T)}</td><td>100%</td><td>${f(D.d7)}</td></tr>`;
+
+const UL = { du: ['Đủ UID', '--du', 'Shop có đủ hàng nhưng chưa lấy đi đóng gói.'], thieu: ['Không đủ UID', '--thieu', 'Shop chưa đủ hàng: đang chờ chuyển hàng về hoặc thiếu hàng.'], qua: ['Đã qua bước lấy hàng', '--qua', 'Đang đóng gói, đã đóng gói hoặc chờ ĐVVC; không còn xét UID.'] };
+document.getElementById('uSplit').innerHTML = ['du', 'thieu', 'qua'].map(k => `<div style="width:${D.uid[k].n * 100 / T}%;background:var(${UL[k][1]})">${p(D.uid[k].n, T)}</div>`).join('');
+document.getElementById('uid').innerHTML = ['du', 'thieu', 'qua'].map(k => `<div class="box"><h3><span class="dot" style="background:var(${UL[k][1]})"></span>${UL[k][0]}</h3><div class="big">${f(D.uid[k].n)}</div><div style="font-size:14px;color:var(--muted)">${UL[k][2]}</div><ul>${D.uid[k].by.slice(0, 6).map(([s, v]) => `<li>${s}: <b>${f(v)}</b></li>`).join('')}</ul></div>`).join('');
+
+const top = D.top, tsum = top.reduce((a, b) => a + b.n, 0);
+document.getElementById('topNote').innerHTML = `15 shop này chiếm <b>${f(tsum)}</b> đơn (${p(tsum, T)} tổng đơn treo). Riêng <b>${top[0].name}</b> có ${f(top[0].n)} đơn, nhiều gấp ${Math.round(top[0].n / top[1].n)} lần shop đứng thứ hai.`;
+document.getElementById('tTop').innerHTML = '<tr><th>#</th><th class="l">Shop</th><th>Đơn treo</th><th>Đủ UID</th><th>Không đủ UID</th><th>Đã qua lấy hàng</th><th>Treo từ 7 ngày</th><th class="l">Nguyên nhân chính</th></tr>' +
+  top.map((t, i) => `<tr><td>${i + 1}</td><td class="l">${t.name}</td><td><b>${f(t.n)}</b></td><td>${f(t.du)}</td><td>${f(t.thieu)}</td><td>${f(t.qua)}</td><td>${t.d7 || '–'}</td><td class="l">${t.main} <span style="color:var(--muted)">(${p(t.mainN, t.n)})</span></td></tr>`).join('');
+
+const fl = D.fails;
+document.getElementById('failNote').innerHTML = `Trong ${f(D.packedN)} đơn đã đóng gói đang chờ ĐVVC, <b>${f(D.failN)}</b> đơn ĐVVC đã đến lấy ít nhất 1 lần nhưng không lấy được. Lý do lấy theo lần thất bại gần nhất. Shopee Express có ghi lý do; cổng GHN không trả lý do.`;
+document.getElementById('tFail').innerHTML = '<tr><th>Lý do</th><th>Số đơn</th><th>%</th></tr>' + fl.map(([k, v]) => `<tr><td>${k}</td><td>${f(v)}</td><td>${p(v, D.failN)}</td></tr>`).join('');
+
+function charts() {
+  Chart.defaults.font.family = '"Be Vietnam Pro",system-ui,sans-serif';
+  Chart.defaults.color = css('--muted'); Chart.defaults.borderColor = css('--line');
+  new Chart(document.getElementById('cCause'), {
+    type: 'bar', data: { labels: cs.map(c => c.name), datasets: [{ data: cs.map(c => c.n), backgroundColor: cs.map(c => css(KH[c.k][1])), borderRadius: 4 }] },
+    options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: (x) => f(x.raw) + ' đơn (' + p(x.raw, T) + ')' } } },
+      scales: { x: { ticks: { callback: (v) => f(v) } }, y: { grid: { display: false }, ticks: { autoSkip: false, callback: function (v) { const s = this.getLabelForValue(v); return window.innerWidth < 600 && s.length > 30 ? s.slice(0, 28) + '…' : s; } } } } }
+  });
+  new Chart(document.getElementById('cTop'), {
+    type: 'bar', data: { labels: top.map(t => t.name), datasets: [
+      { label: 'Đủ UID', data: top.map(t => t.du), backgroundColor: css('--du') },
+      { label: 'Không đủ UID', data: top.map(t => t.thieu), backgroundColor: css('--thieu') },
+      { label: 'Đã qua lấy hàng', data: top.map(t => t.qua), backgroundColor: css('--qua') }] },
+    options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { mode: 'index', callbacks: { label: (x) => x.dataset.label + ': ' + f(x.raw) } } },
+      scales: { x: { stacked: true, ticks: { callback: (v) => f(v) } }, y: { stacked: true, grid: { display: false }, ticks: { autoSkip: false } } } }
+  });
+}
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(charts);
+</script>
+</body>
+</html>
