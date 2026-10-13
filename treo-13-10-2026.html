@@ -522,28 +522,58 @@ const D = {
  ],
  "fails": [
   [
-   "GHN (hệ thống GHN không ghi lý do)",
-   1988
-  ],
-  [
-   "Không lấy kịp",
-   779
-  ],
-  [
-   "Người gửi hẹn lại ngày lấy",
+   "Người gửi (shop) hẹn lại ngày lấy hàng",
+   1857,
+   1308,
    549
   ],
   [
+   "Không lấy kịp",
+   779,
+   0,
+   779
+  ],
+  [
+   "Thông tin lấy hàng sai (địa chỉ / SĐT)",
+   339,
+   339,
+   0
+  ],
+  [
+   "Nhân viên gặp sự cố",
+   293,
+   293,
+   0
+  ],
+  [
    "Không liên hệ được người gửi",
+   174,
+   0,
    174
   ],
   [
+   "Thuê bao không liên lạc được / Máy bận",
+   35,
+   35,
+   0
+  ],
+  [
    "Đơn hàng được lấy bởi tài xế khác/ sai tuyến lấy",
+   23,
+   0,
    23
   ],
   [
    "Đóng gói chưa đảm bảo",
+   18,
+   0,
    18
+  ],
+  [
+   "Người gửi muốn gửi hàng tại bưu cục",
+   13,
+   13,
+   0
   ]
  ],
  "packedN": 6037,
@@ -594,8 +624,8 @@ document.getElementById('tTop').innerHTML = '<tr><th>#</th><th class="l">Shop</t
   TOP.map((t, i) => `<tr><td>${i + 1}</td><td class="l">${t.name}</td><td><b>${f(t.n)}</b></td><td>${f(t.du)}</td><td>${f(t.thieu)}</td><td>${f(t.qua)}</td><td>${t.d7 || '–'}</td><td class="l">${t.main} <span style="color:var(--muted)">(${p(t.mainN, t.n)})</span></td></tr>`).join('');
 
 const fl = D.fails;
-document.getElementById('failNote').innerHTML = `Trong ${f(D.packedN)} đơn đã đóng gói đang chờ ĐVVC, <b>${f(D.failN)}</b> đơn ĐVVC đã đến lấy ít nhất 1 lần nhưng không lấy được. Lý do lấy theo lần thất bại gần nhất. Shopee Express có ghi lý do; cổng GHN không trả lý do.`;
-document.getElementById('tFail').innerHTML = '<tr><th>Lý do</th><th>Số đơn</th><th>%</th></tr>' + fl.map(([k, v]) => `<tr><td>${k}</td><td>${f(v)}</td><td>${p(v, D.failN)}</td></tr>`).join('');
+document.getElementById('failNote').innerHTML = `Trong ${f(D.packedN)} đơn đã đóng gói đang chờ ĐVVC, <b>${f(D.failN)}</b> đơn ĐVVC đã đến lấy ít nhất 1 lần nhưng không lấy được. Lý do lấy theo lần thất bại gần nhất. Lý do lấy từ web Shopee Express và cổng GHN.`;
+document.getElementById('tFail').innerHTML = '<tr><th>Lý do</th><th>Số đơn</th><th>%</th><th>Giao Hàng Nhanh</th><th>Shopee Express</th></tr>' + fl.map(([k, v, g, x]) => `<tr><td>${k}</td><td><b>${f(v)}</b></td><td>${p(v, D.failN)}</td><td>${g ? f(g) : '–'}</td><td>${x ? f(x) : '–'}</td></tr>`).join('') + `<tr class="tot"><td>Tổng</td><td>${f(D.failN)}</td><td>100%</td><td>${f(fl.reduce((a, r) => a + r[2], 0))}</td><td>${f(fl.reduce((a, r) => a + r[3], 0))}</td></tr>`;
 
 function charts() {
   Chart.defaults.font.family = '"Be Vietnam Pro",system-ui,sans-serif';
