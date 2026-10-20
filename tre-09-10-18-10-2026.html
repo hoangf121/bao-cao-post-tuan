@@ -150,7 +150,7 @@ const d10 = D.days.find(d => d.d === '10-10') || { late: 0, total: 0 };
 const s1 = D.shops[0];
 document.getElementById('alert').innerHTML = `Đơn đặt ngày <b>10/10</b> (sale 10.10) chiếm <b>${p(d10.late, L)}</b> số đơn trễ (${f(d10.late)} đơn). Riêng shop <b>${s1.name}</b> có ${f(s1.late)} đơn trễ, bằng ${p(s1.late, L)} toàn bộ đơn trễ.`;
 const tiles = [
-  ['Tỉ lệ đơn trễ', p(L, D.totalPost), f(L) + ' / ' + f(D.totalPost) + ' đơn POST · ' + f(D.nouid) + ' đơn thiếu UID', '--text'],
+  ['Tỉ lệ đơn trễ', p(L, D.totalPost), f(L) + ' / ' + f(D.totalPost) + ' đơn POST', '--text'],
   ['Đơn No UID', f(g('Đơn No UID')), p(g('Đơn No UID'), L) + ' · thiếu UID / chờ hàng', '--thieu'],
   ['Trễ do shop', f(g('Shop')), p(g('Shop'), L) + ' · lấy hàng, đóng gói chậm / chờ shop xác nhận', '--shop'],
   ['Trễ do vận chuyển', f(g('Vận chuyển')), p(g('Vận chuyển'), L) + ' số đơn trễ', '--dvvc'],
