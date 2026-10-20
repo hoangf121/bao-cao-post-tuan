@@ -63,7 +63,6 @@ tr.tot td{font-weight:600}
 <div class="wrap">
 <h1>Đơn POST trễ – đơn tạo từ 09/10 đến 18/10/2026</h1>
 <p class="sub">Đơn Hasaki giao qua Giao Hàng Nhanh và Shopee Express nằm trong danh sách <b>đơn thiếu UID</b>. Đơn bị tính <b>trễ</b> khi shop đóng gói xong sau hơn <b>24 giờ</b> kể từ lúc tạo đơn, hoặc ĐVVC tới lấy sau hơn <b>24 giờ</b> kể từ lúc đóng gói. Số liệu chốt lúc 11:08 20/10/2026.</p>
-<div class="alert" id="alert"></div>
 <div class="tiles" id="tiles"></div>
 
 <div class="card">
@@ -100,7 +99,6 @@ const KH = { 'Đơn No UID': ['Đơn No UID (thiếu UID / chờ hàng)', '--thi
 const L = D.late, g = (k) => D.grp[k] || 0;
 const d10 = D.days.find(d => d.d === '10-10') || { late: 0, total: 0 };
 const s1 = D.shops[0];
-document.getElementById('alert').innerHTML = `Đơn đặt ngày <b>10/10</b> (sale 10.10) chiếm <b>${p(d10.late, L)}</b> số đơn trễ (${f(d10.late)} đơn). Riêng shop <b>${s1.name}</b> có ${f(s1.late)} đơn trễ, bằng ${p(s1.late, L)} toàn bộ đơn trễ.`;
 const tiles = [
   ['Tỉ lệ đơn trễ', p(L, D.totalPost), f(L) + ' / ' + f(D.totalPost) + ' đơn POST', '--text'],
   ['Đơn No UID', f(g('Đơn No UID')), p(g('Đơn No UID'), L) + ' · thiếu UID / chờ hàng', '--thieu'],
