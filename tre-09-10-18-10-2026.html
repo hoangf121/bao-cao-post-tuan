@@ -72,7 +72,6 @@ tr.tot td{font-weight:600}
 .wk input{width:16px;height:16px;accent-color:var(--text)}
 .wk .sm{margin-left:auto;font-size:12.5px;color:var(--muted)}
 .wk hr{border:0;border-top:1px solid var(--line);margin:6px 4px}
-.up{color:var(--dvvc)}.down{color:var(--shop)}
 </style>
 </head>
 <body>
@@ -84,7 +83,7 @@ tr.tot td{font-weight:600}
 
 <div class="card">
 <h2>So sánh các tuần</h2>
-<p class="note">Tỉ lệ trễ tính trên tổng đơn POST tạo trong tuần (WMS, không tính đơn huỷ). Mũi tên so với tuần liền trước.</p>
+<p class="note">Tỉ lệ trễ tính trên tổng đơn POST tạo trong tuần (WMS, không tính đơn huỷ).</p>
 <div class="tbl"><table id="tWeek"></table></div>
 </div>
 
@@ -120,10 +119,9 @@ const f = (n) => n.toLocaleString('vi-VN');
 const p = (n, t) => (Math.round(n * 1000 / t) / 10).toLocaleString('vi-VN') + '%';
 const KH = { 'Đơn No UID': ['Đơn No UID (thiếu UID / chờ hàng)', '--thieu'], 'Shop': ['Trễ do shop', '--shop'], 'Vận chuyển': ['Vận chuyển lấy chậm', '--dvvc'], 'Nguyên nhân khác': ['Nguyên nhân khác (chờ CS)', '--cs'] };
 let CH = [];
-const wkRow = (w, i) => { const r = w.late / w.totalPost, pv = WEEKS[i + 1]; let ar = '';
-  if (pv) { const d = (r - pv.late / pv.totalPost) * 100; ar = ' <span class="' + (d > 0 ? 'up' : 'down') + '">' + (d > 0 ? '▲' : '▼') + ' ' + Math.abs(Math.round(d * 100) / 100).toLocaleString('vi-VN') + ' điểm</span>'; }
+const wkRow = (w) => {
   const G = (k) => w.grp[k] || 0;
-  return `<tr><td class="l">${w.label}</td><td>${f(w.totalPost)}</td><td><b>${f(w.late)}</b></td><td><b>${p(w.late, w.totalPost)}</b>${ar}</td><td>${f(G('Đơn No UID'))}</td><td>${f(G('Shop'))}</td><td>${f(G('Vận chuyển'))}</td><td>${f(G('Nguyên nhân khác'))}</td><td class="l">${w.shops[0] ? w.shops[0].name + ' (' + f(w.shops[0].late) + ')' : ''}</td></tr>`; };
+  return `<tr><td class="l">${w.label}</td><td>${f(w.totalPost)}</td><td><b>${f(w.late)}</b></td><td><b>${p(w.late, w.totalPost)}</b></td><td>${f(G('Đơn No UID'))}</td><td>${f(G('Shop'))}</td><td>${f(G('Vận chuyển'))}</td><td>${f(G('Nguyên nhân khác'))}</td><td class="l">${w.shops[0] ? w.shops[0].name + ' (' + f(w.shops[0].late) + ')' : ''}</td></tr>`; };
 document.getElementById('tWeek').innerHTML = '<tr><th class="l">Tuần (ngày tạo đơn)</th><th>Đơn POST</th><th>Đơn trễ</th><th>Tỉ lệ trễ</th><th>No UID</th><th>Do shop</th><th>Do VC</th><th>Khác</th><th class="l">Shop trễ nhiều nhất</th></tr>' + WEEKS.map(wkRow).join('');
 // ===== chon ky: tung tuan / nhieu tuan / ca thang =====
 const MONTHS = [...new Set(WEEKS.map((w) => w.key.slice(0, 7)))];
