@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đơn POST trễ 19–25/10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{color-scheme:light;--bg:#f6f6f4;--surface:#fcfcfb;--line:#e4e3de;--text:#1c1c1a;--muted:#5d5c57;--faint:#8a8983;
+ --shop:#2a78d6;--hang:#9a6bd1;--dvvc:#eb6834;--cs:#8a8983;--du:#1baf7a;--thieu:#d64545;--qua:#b9b8b1;--warn:#fff4d6;--warnline:#f0d78c}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#121211;--surface:#1a1a19;--line:#2f2f2c;--text:#f3f2ee;--muted:#c3c2b7;--faint:#8f8e86;
+ --shop:#3987e5;--hang:#a97ee0;--dvvc:#d95926;--cs:#8f8e86;--du:#199e70;--thieu:#e05a5a;--qua:#55544f;--warn:#2e2814;--warnline:#5c4f22}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#121211;--surface:#1a1a19;--line:#2f2f2c;--text:#f3f2ee;--muted:#c3c2b7;--faint:#8f8e86;
+ --shop:#3987e5;--hang:#a97ee0;--dvvc:#d95926;--cs:#8f8e86;--du:#199e70;--thieu:#e05a5a;--qua:#55544f;--warn:#2e2814;--warnline:#5c4f22}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 "Be Vietnam Pro",system-ui,sans-serif}
+.wrap{max-width:1040px;margin:0 auto;padding:28px 16px 60px}
+h1{font-size:28px;line-height:1.25;margin:0 0 6px}
+h2{font-size:20px;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 20px}
+.alert{background:var(--warn);border:1px solid var(--warnline);border-radius:12px;padding:12px 16px;margin:0 0 22px;font-size:15px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:24px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.tile .k{font-size:14px;color:var(--muted)}
+.tile .v{font-size:32px;font-weight:700;line-height:1.2;margin:4px 0;font-variant-numeric:tabular-nums}
+.tile .n{font-size:14px;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:middle}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 12px;margin-bottom:18px}
+.card p.note{color:var(--muted);margin:2px 0 12px;font-size:15px}
+.chart{position:relative;height:320px}
+.chart.tall{height:520px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin:0 0 8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.split{display:flex;height:34px;border-radius:8px;overflow:hidden;margin:6px 0 10px}
+.split div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:6px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
+th:first-child,td:first-child,td.l,th.l{text-align:left}
+th{color:var(--muted);font-weight:500}
+tr.tot td{font-weight:600}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.box{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.box h3{margin:0 0 2px;font-size:16px}
+.box .big{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.box ul{margin:6px 0 0;padding-left:18px;font-size:14px;color:var(--muted)}
+.foot{color:var(--faint);font-size:13px;margin-top:28px}
+.tag{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;color:#fff;white-space:nowrap}
+</style>
+<style>
+.flt{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 10px;align-items:center}
+.flt select,.flt input{font:inherit;font-size:14px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text)}
+.flt input{min-width:220px}.flt .cnt{margin-left:auto;font-size:14px;color:var(--muted)}
+#lst td{font-size:13.5px;white-space:nowrap}#lst td.w{white-space:normal;min-width:220px;text-align:left}
+.pager{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin:10px 0 4px;font-size:14px;color:var(--muted)}
+.pager button{font:inherit;font-size:14px;padding:4px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer}
+.pager button:disabled{opacity:.4;cursor:default}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Đơn POST trễ – đơn tạo từ 19/10 đến 25/10/2026</h1>
+<p class="sub">Đơn Hasaki giao qua Giao Hàng Nhanh và Shopee Express nằm trong danh sách <b>đơn thiếu UID</b>. Đơn bị tính <b>trễ</b> khi shop đóng gói xong sau hơn <b>24 giờ</b> kể từ lúc tạo đơn, hoặc ĐVVC tới lấy sau hơn <b>24 giờ</b> kể từ lúc đóng gói. Số liệu chốt lúc 09:16 27/10/2026.</p>
+<div class="tiles" id="tiles"></div>
+
+<div class="card">
+<h2>Đơn trễ do đâu</h2>
+<p class="note">Mỗi đơn trễ được xếp vào <b>một</b> nguyên nhân theo khâu bị trễ đầu tiên. Đơn vừa đóng gói trễ vừa bị ĐVVC lấy chậm (<b id="both"></b> đơn) được tính vào khâu đóng gói.</p>
+<div class="split" id="split"></div>
+<div class="legend" id="kLegend"></div>
+<div class="chart" id="causeBox"><canvas id="cCause"></canvas></div>
+<div class="tbl"><table id="tCause"></table></div>
+</div>
+
+<div class="card">
+<h2>Theo ngày tạo đơn</h2>
+<p class="note">Tỉ lệ trễ tính trên tổng đơn POST của ngày đó.</p>
+<div class="tbl"><table id="tDay"></table></div>
+</div>
+
+<div class="card">
+<h2>Top 15 shop có nhiều đơn trễ nhất</h2>
+<p class="note" id="topNote"></p>
+<div class="legend"><span><i style="background:var(--thieu)"></i>Đơn No UID</span><span><i style="background:var(--shop)"></i>Trễ do shop</span><span><i style="background:var(--dvvc)"></i>Vận chuyển lấy chậm</span><span><i style="background:var(--cs)"></i>Nguyên nhân khác</span></div>
+<div class="chart tall"><canvas id="cTop"></canvas></div>
+<div class="tbl"><table id="tTop"></table></div>
+<details style="margin-top:8px"><summary style="cursor:pointer;color:var(--muted)">Xem tất cả shop có đơn trễ</summary><div class="tbl"><table id="tAll"></table></div></details>
+</div>
+
+</div>
+<script>
+const D = {"totalPost":16326,"nouid":525,"late":457,"grp":{"Đơn No UID":338,"Shop":29,"Vận chuyển":12,"Nguyên nhân khác":78},"both":44,"causes":[{"g":"Đơn No UID","name":"Thiếu UID – chờ hàng hơn 24h mới lấy hàng","n":300},{"g":"Nguyên nhân khác","name":"Chờ CS xử lý","n":52},{"g":"Đơn No UID","name":"Thiếu UID – đến nay chưa lấy hàng","n":38},{"g":"Nguyên nhân khác","name":"Chờ CS xác nhận với khách","n":26},{"g":"Shop","name":"Lấy hàng, đóng gói chậm","n":25},{"g":"Vận chuyển","name":"ĐVVC tới lấy chậm (> 24h sau khi đóng gói)","n":9},{"g":"Shop","name":"Chờ shop xác nhận đơn","n":4},{"g":"Vận chuyển","name":"Đã đóng gói, ĐVVC chưa tới lấy","n":3}],"days":[{"d":"10-19","nouid":69,"late":53,"uid":46,"shop":3,"vc":3,"khac":1,"total":1971},{"d":"10-20","nouid":121,"late":112,"uid":94,"shop":12,"vc":5,"khac":1,"total":4275},{"d":"10-21","nouid":69,"late":67,"uid":62,"shop":2,"vc":0,"khac":3,"total":2048},{"d":"10-22","nouid":62,"late":53,"uid":41,"shop":5,"vc":0,"khac":7,"total":1783},{"d":"10-23","nouid":58,"late":42,"uid":31,"shop":3,"vc":0,"khac":8,"total":1484},{"d":"10-24","nouid":99,"late":86,"uid":40,"shop":2,"vc":4,"khac":40,"total":2309},{"d":"10-25","nouid":47,"late":44,"uid":24,"shop":2,"vc":0,"khac":18,"total":2456}],"dv":[{"dv":"Shopee Express","n":291,"late":259,"vc":4},{"dv":"Giao hàng nhanh","n":233,"late":197,"vc":8},{"dv":"Giao Hàng Tiết kiệm","n":1,"late":1,"vc":0}],"shops":[{"name":"170 QUOC LO 1A","total":1349,"nouid":295,"late":232,"uid":194,"shop":14,"vc":6,"khac":18},{"name":"568 LUY BAN BICH","total":72,"nouid":21,"late":21,"uid":17,"shop":1,"vc":0,"khac":3},{"name":"413 TRAN HUNG DAO","total":77,"nouid":21,"late":21,"uid":0,"shop":0,"vc":0,"khac":21},{"name":"1207 NGUYEN DUY TRINH","total":158,"nouid":16,"late":16,"uid":14,"shop":1,"vc":0,"khac":1},{"name":"274 GO XOAI","total":119,"nouid":13,"late":13,"uid":11,"shop":1,"vc":0,"khac":1},{"name":"362 DONG KHOI","total":60,"nouid":10,"late":10,"uid":8,"shop":0,"vc":0,"khac":2},{"name":"182 PHAN DANG LUU","total":78,"nouid":11,"late":9,"uid":7,"shop":1,"vc":1,"khac":0},{"name":"517 PHU LOI","total":98,"nouid":8,"late":8,"uid":8,"shop":0,"vc":0,"khac":0},{"name":"219 KHAM THIEN","total":123,"nouid":8,"late":8,"uid":5,"shop":0,"vc":0,"khac":3},{"name":"276 QUANG TRUNG","total":110,"nouid":8,"late":8,"uid":5,"shop":1,"vc":0,"khac":2},{"name":"284 BUI THI XUAN","total":181,"nouid":7,"late":7,"uid":4,"shop":3,"vc":0,"khac":0},{"name":"477 LE VAN THO","total":54,"nouid":6,"late":6,"uid":5,"shop":0,"vc":0,"khac":1},{"name":"286 TRUONG CHINH","total":72,"nouid":6,"late":6,"uid":1,"shop":0,"vc":0,"khac":5},{"name":"1261 PHAM HUNG","total":71,"nouid":5,"late":5,"uid":4,"shop":0,"vc":0,"khac":1},{"name":"726 HUYNH TAN PHAT","total":69,"nouid":5,"late":5,"uid":3,"shop":0,"vc":0,"khac":2},{"name":"58 HUNG VUONG","total":151,"nouid":4,"late":4,"uid":4,"shop":0,"vc":0,"khac":0},{"name":"398 2 THANG 4","total":51,"nouid":4,"late":4,"uid":1,"shop":0,"vc":0,"khac":3},{"name":"295 GIAI PHONG","total":197,"nouid":4,"late":4,"uid":4,"shop":0,"vc":0,"khac":0},{"name":"334 DINH BO LINH","total":45,"nouid":3,"late":3,"uid":2,"shop":0,"vc":0,"khac":1},{"name":"26 BUI VAN HOA","total":83,"nouid":3,"late":3,"uid":3,"shop":0,"vc":0,"khac":0},{"name":"392 NGUYEN VAN QUA","total":62,"nouid":2,"late":2,"uid":1,"shop":0,"vc":0,"khac":1},{"name":"34 DT 746","total":173,"nouid":2,"late":2,"uid":1,"shop":0,"vc":0,"khac":1},{"name":"389 HUNG VUONG","total":71,"nouid":2,"late":2,"uid":2,"shop":0,"vc":0,"khac":0},{"name":"199 HUNG VUONG","total":174,"nouid":2,"late":2,"uid":2,"shop":0,"vc":0,"khac":0},{"name":"214 QUOC LO 62","total":47,"nouid":2,"late":2,"uid":1,"shop":0,"vc":0,"khac":1},{"name":"90 NGUYEN HUE","total":78,"nouid":2,"late":2,"uid":2,"shop":0,"vc":0,"khac":0},{"name":"2857 LUONG DINH CUA","total":111,"nouid":3,"late":2,"uid":2,"shop":0,"vc":0,"khac":0},{"name":"59 MAI THUC LOAN","total":61,"nouid":3,"late":2,"uid":2,"shop":0,"vc":0,"khac":0},{"name":"4 TAY NAM","total":156,"nouid":2,"late":2,"uid":1,"shop":1,"vc":0,"khac":0},{"name":"11 QUANG TRUNG","total":256,"nouid":2,"late":2,"uid":2,"shop":0,"vc":0,"khac":0},{"name":"71 TRAN HUNG DAO","total":212,"nouid":2,"late":2,"uid":1,"shop":1,"vc":0,"khac":0},{"name":"76 PHAN VAN HON","total":67,"nouid":2,"late":2,"uid":1,"shop":0,"vc":1,"khac":0},{"name":"174 PHAN DINH PHUNG","total":175,"nouid":2,"late":2,"uid":2,"shop":0,"vc":0,"khac":0},{"name":"554 LE HONG PHONG","total":100,"nouid":2,"late":2,"uid":1,"shop":1,"vc":0,"khac":0},{"name":"45 NGUYEN TAT THANH","total":93,"nouid":2,"late":2,"uid":0,"shop":0,"vc":0,"khac":2},{"name":"61 AN MY","total":149,"nouid":2,"late":2,"uid":2,"shop":0,"vc":0,"khac":0},{"name":"349 HUNG VUONG","total":125,"nouid":2,"late":2,"uid":0,"shop":0,"vc":0,"khac":2},{"name":"75 DONG KHOI","total":128,"nouid":1,"late":1,"uid":0,"shop":0,"vc":0,"khac":1},{"name":"137 NGUYEN TRAI","total":136,"nouid":1,"late":1,"uid":0,"shop":1,"vc":0,"khac":0},{"name":"594 NGUYEN VAN CU","total":144,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"194 LUONG NGOC QUYEN","total":95,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"160 30 THANG 4","total":74,"nouid":1,"late":1,"uid":0,"shop":0,"vc":1,"khac":0},{"name":"1 22 THANG 12","total":120,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"104 PHAN CHU TRINH","total":103,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"895 TRAN HUNG DAO","total":44,"nouid":1,"late":1,"uid":0,"shop":0,"vc":0,"khac":1},{"name":"124 30 THANG 4","total":80,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"67 DANG THUC VINH","total":48,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"479 30 THANG 4","total":29,"nouid":1,"late":1,"uid":0,"shop":0,"vc":0,"khac":1},{"name":"129 MAI THI HONG HANH","total":60,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"2203 HUNG VUONG","total":78,"nouid":1,"late":1,"uid":0,"shop":0,"vc":0,"khac":1},{"name":"191 DO TUONG PHONG","total":31,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"553 DT 767","total":45,"nouid":1,"late":1,"uid":0,"shop":0,"vc":1,"khac":0},{"name":"459 NGUYEN DANG","total":174,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"241 NGUYEN TAT THANH","total":155,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"1967 DT 768","total":42,"nouid":1,"late":1,"uid":0,"shop":0,"vc":1,"khac":0},{"name":"E4 DUONG N9","total":56,"nouid":1,"late":1,"uid":0,"shop":1,"vc":0,"khac":0},{"name":"104 QUANG TRUNG","total":36,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"635 QUOC LO 14","total":130,"nouid":1,"late":1,"uid":0,"shop":0,"vc":0,"khac":1},{"name":"244 DONG DA","total":23,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"188 HUNG VUONG","total":110,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"185 NGUYEN TRAI","total":null,"nouid":1,"late":1,"uid":0,"shop":0,"vc":0,"khac":1},{"name":"16 HUNG VUONG","total":134,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"168 AP CHANH","total":74,"nouid":1,"late":1,"uid":0,"shop":1,"vc":0,"khac":0},{"name":"384 PHAN BOI CHAU","total":141,"nouid":1,"late":1,"uid":0,"shop":1,"vc":0,"khac":0},{"name":"152 QUOC LO 1","total":45,"nouid":1,"late":1,"uid":1,"shop":0,"vc":0,"khac":0},{"name":"62 NGUYEN PHUOC LAN","total":20,"nouid":1,"late":1,"uid":0,"shop":0,"vc":0,"khac":1},{"name":"1297 HUNG VUONG","total":79,"nouid":1,"late":1,"uid":0,"shop":0,"vc":1,"khac":0}],"snap":"09:16 27/10/2026","noHist":0};
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const f = (n) => n.toLocaleString('vi-VN');
+const p = (n, t) => (Math.round(n * 1000 / t) / 10).toLocaleString('vi-VN') + '%';
+const KH = { 'Đơn No UID': ['Đơn No UID (thiếu UID / chờ hàng)', '--thieu'], 'Shop': ['Trễ do shop', '--shop'], 'Vận chuyển': ['Vận chuyển lấy chậm', '--dvvc'], 'Nguyên nhân khác': ['Nguyên nhân khác (chờ CS)', '--cs'] };
+const L = D.late, g = (k) => D.grp[k] || 0;
+const d10 = D.days.find(d => d.d === '10-10') || { late: 0, total: 0 };
+const s1 = D.shops[0];
+const tiles = [
+  ['Tỉ lệ đơn trễ', p(L, D.totalPost), f(L) + ' / ' + f(D.totalPost) + ' đơn POST', '--text'],
+  ['Đơn No UID', f(g('Đơn No UID')), p(g('Đơn No UID'), L) + ' · thiếu UID / chờ hàng', '--thieu'],
+  ['Trễ do shop', f(g('Shop')), p(g('Shop'), L) + ' · lấy hàng, đóng gói chậm / chờ shop xác nhận', '--shop'],
+  ['Trễ do vận chuyển', f(g('Vận chuyển')), p(g('Vận chuyển'), L) + ' số đơn trễ', '--dvvc'],
+  ['Nguyên nhân khác', f(g('Nguyên nhân khác')), p(g('Nguyên nhân khác'), L) + ' · chờ CS xử lý / xác nhận với khách', '--cs'],
+];
+document.getElementById('tiles').innerHTML = tiles.map(([k, v, n, c]) => `<div class="tile"><div class="k"><span class="dot" style="background:var(${c})"></span>${k}</div><div class="v">${v}</div><div class="n">${n}</div></div>`).join('');
+document.getElementById('both').textContent = f(D.both);
+const ks = Object.keys(KH).filter(k => g(k) > 0).sort((a, b) => g(b) - g(a));
+document.getElementById('split').innerHTML = ks.map(k => `<div style="width:${g(k) * 100 / L}%;background:var(${KH[k][1]})" title="${KH[k][0]}: ${f(g(k))}">${g(k) / L > .08 ? p(g(k), L) : ''}</div>`).join('');
+document.getElementById('kLegend').innerHTML = ks.map(k => `<span><i style="background:var(${KH[k][1]})"></i>${KH[k][0]}: <b>${f(g(k))}</b> (${p(g(k), L)})</span>`).join('');
+const cs = D.causes;
+document.getElementById('causeBox').style.height = Math.max(240, cs.length * 38 + 40) + 'px';
+document.getElementById('tCause').innerHTML = '<tr><th>Nguyên nhân</th><th class="l">Thuộc khâu</th><th>Số đơn</th><th>% đơn trễ</th></tr>' +
+  cs.map(c => `<tr><td>${c.name}</td><td class="l"><span class="tag" style="background:var(${KH[c.g][1]})">${KH[c.g][0]}</span></td><td>${f(c.n)}</td><td>${p(c.n, L)}</td></tr>`).join('') +
+  `<tr class="tot"><td>Tổng</td><td></td><td>${f(L)}</td><td>100%</td></tr>`;
+document.getElementById('tDay').innerHTML = '<tr><th>Ngày tạo</th><th>Đơn POST</th><th>Đơn trễ</th><th>Tỉ lệ trễ</th><th>No UID</th><th>Do shop</th><th>Do vận chuyển</th><th>Khác</th></tr>' +
+  D.days.map(d => `<tr><td>${d.d.split('-').reverse().join('/')}</td><td>${d.total ? f(d.total) : '–'}</td><td><b>${f(d.late)}</b></td><td>${d.total ? p(d.late, d.total) : '–'}</td><td>${f(d.uid)}</td><td>${f(d.shop)}</td><td>${f(d.vc)}</td><td>${f(d.khac)}</td></tr>`).join('') +
+  `<tr class="tot"><td>Tổng</td><td>${f(D.totalPost)}</td><td>${f(L)}</td><td>${p(L, D.totalPost)}</td><td>${f(g('Đơn No UID'))}</td><td>${f(g('Shop'))}</td><td>${f(g('Vận chuyển'))}</td><td>${f(g('Nguyên nhân khác'))}</td></tr>`;
+const TOP = D.shops.slice(0, 15), tsum = TOP.reduce((a, b) => a + b.late, 0);
+const main = t => { const m = [['Đơn No UID', t.uid], ['Shop', t.shop], ['Vận chuyển', t.vc], ['Nguyên nhân khác', t.khac]].sort((a, b) => b[1] - a[1])[0]; return KH[m[0]][0] + ' <span style="color:var(--muted)">(' + p(m[1], t.late) + ')</span>'; };
+document.getElementById('topNote').innerHTML = `15 shop này có <b>${f(tsum)}</b> đơn trễ (${p(tsum, L)} tổng đơn trễ). Riêng <b>${TOP[0].name}</b> có ${f(TOP[0].late)} đơn, nhiều gấp ${Math.round(TOP[0].late / TOP[1].late)} lần shop đứng thứ hai.`;
+const row = (t, i) => `<tr><td>${i + 1}</td><td class="l">${t.name}</td><td>${t.total ? f(t.total) : '–'}</td><td><b>${f(t.late)}</b></td><td>${t.total ? p(t.late, t.total) : '–'}</td><td>${f(t.uid)}</td><td>${f(t.shop)}</td><td>${f(t.vc)}</td><td>${f(t.khac)}</td><td class="l">${main(t)}</td></tr>`;
+const hdr = '<tr><th>#</th><th class="l">Shop</th><th>Đơn POST</th><th>Đơn trễ</th><th>% trễ / đơn POST</th><th>No UID</th><th>Do shop</th><th>Do VC</th><th>Khác</th><th class="l">Nguyên nhân chính</th></tr>';
+document.getElementById('tTop').innerHTML = hdr + TOP.map(row).join('');
+document.getElementById('tAll').innerHTML = hdr + D.shops.map(row).join('');
+function charts() {
+  Chart.defaults.font.family = '"Be Vietnam Pro",system-ui,sans-serif'; Chart.defaults.color = css('--muted'); Chart.defaults.borderColor = css('--line');
+  new Chart(document.getElementById('cCause'), { type: 'bar', data: { labels: cs.map(c => c.name), datasets: [{ data: cs.map(c => c.n), backgroundColor: cs.map(c => css(KH[c.g][1])), borderRadius: 4 }] },
+    options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: x => f(x.raw) + ' đơn (' + p(x.raw, L) + ')' } } },
+      scales: { x: { ticks: { callback: v => f(v) } }, y: { grid: { display: false }, ticks: { autoSkip: false, callback: function (v) { const s = this.getLabelForValue(v); return window.innerWidth < 600 && s.length > 30 ? s.slice(0, 28) + '…' : s; } } } } } });
+  new Chart(document.getElementById('cTop'), { type: 'bar', data: { labels: TOP.map(t => t.name), datasets: [
+      { label: 'Đơn No UID', data: TOP.map(t => t.uid), backgroundColor: css('--thieu') },
+      { label: 'Trễ do shop', data: TOP.map(t => t.shop), backgroundColor: css('--shop') },
+      { label: 'Vận chuyển lấy chậm', data: TOP.map(t => t.vc), backgroundColor: css('--dvvc') },
+      { label: 'Nguyên nhân khác', data: TOP.map(t => t.khac), backgroundColor: css('--cs') }] },
+    options: { indexAxis: 'y', maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { mode: 'index', callbacks: { label: x => x.dataset.label + ': ' + f(x.raw) } } },
+      scales: { x: { stacked: true, ticks: { callback: v => f(v) } }, y: { stacked: true, grid: { display: false }, ticks: { autoSkip: false } } } } });
+}
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(charts);
+</script>
+</body>
+</html>
