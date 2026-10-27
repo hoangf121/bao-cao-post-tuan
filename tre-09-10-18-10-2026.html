@@ -57,9 +57,21 @@ tr.tot td{font-weight:600}
 .pager{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin:10px 0 4px;font-size:14px;color:var(--muted)}
 .pager button{font:inherit;font-size:14px;padding:4px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);cursor:pointer}
 .pager button:disabled{opacity:.4;cursor:default}
-.wk{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
-.wk button{font:inherit;font-size:14px;font-weight:600;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--text);cursor:pointer}
-.wk button[aria-pressed="true"]{background:var(--text);color:var(--surface);border-color:var(--text)}
+.wk{position:relative;display:inline-block;margin:0 0 18px;max-width:100%}
+.wk>summary{list-style:none;display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;padding:9px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--text);cursor:pointer;user-select:none}
+.wk>summary::-webkit-details-marker{display:none}
+.wk>summary .lb{font-weight:500;color:var(--muted)}
+.wk>summary::after{content:'';width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translateY(-2px);margin-left:4px}
+.wk[open]>summary::after{transform:rotate(-135deg) translateY(-2px)}
+.wk .pn{position:absolute;z-index:20;top:calc(100% + 6px);left:0;min-width:280px;max-width:calc(100vw - 32px);background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);padding:8px}
+.wk .gh{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:8px 10px 4px}
+.wk label,.wk .qk{display:flex;align-items:center;gap:10px;width:100%;font:inherit;font-size:14px;text-align:left;padding:8px 10px;border:0;border-radius:8px;background:none;color:var(--text);cursor:pointer}
+.wk label:hover,.wk .qk:hover{background:var(--bg)}
+.wk .qk[aria-pressed="true"]{font-weight:600}
+.wk .qk[aria-pressed="true"]::after{content:'✓';margin-left:auto}
+.wk input{width:16px;height:16px;accent-color:var(--text)}
+.wk .sm{margin-left:auto;font-size:12.5px;color:var(--muted)}
+.wk hr{border:0;border-top:1px solid var(--line);margin:6px 4px}
 .up{color:var(--dvvc)}.down{color:var(--shop)}
 </style>
 </head>
@@ -67,7 +79,7 @@ tr.tot td{font-weight:600}
 <div class="wrap">
 <h1 id="h1"></h1>
 <p class="sub">Đơn Hasaki giao qua Giao Hàng Nhanh và Shopee Express nằm trong danh sách <b>đơn thiếu UID</b>. Đơn bị tính <b>trễ</b> khi shop đóng gói xong sau hơn <b>24 giờ</b> kể từ lúc tạo đơn, hoặc ĐVVC tới lấy sau hơn <b>24 giờ</b> kể từ lúc đóng gói. Số liệu chốt lúc <span id="snap"></span>.</p>
-<div class="wk" id="wk" role="group" aria-label="Chọn tuần"></div>
+<details class="wk" id="wk"><summary><span class="lb">Kỳ báo cáo:</span><span id="wkCur"></span></summary><div class="pn" id="wkPn"></div></details>
 <div class="tiles" id="tiles"></div>
 
 <div class="card">
@@ -113,15 +125,51 @@ const wkRow = (w, i) => { const r = w.late / w.totalPost, pv = WEEKS[i + 1]; let
   const G = (k) => w.grp[k] || 0;
   return `<tr><td class="l">${w.label}</td><td>${f(w.totalPost)}</td><td><b>${f(w.late)}</b></td><td><b>${p(w.late, w.totalPost)}</b>${ar}</td><td>${f(G('Đơn No UID'))}</td><td>${f(G('Shop'))}</td><td>${f(G('Vận chuyển'))}</td><td>${f(G('Nguyên nhân khác'))}</td><td class="l">${w.shops[0] ? w.shops[0].name + ' (' + f(w.shops[0].late) + ')' : ''}</td></tr>`; };
 document.getElementById('tWeek').innerHTML = '<tr><th class="l">Tuần (ngày tạo đơn)</th><th>Đơn POST</th><th>Đơn trễ</th><th>Tỉ lệ trễ</th><th>No UID</th><th>Do shop</th><th>Do VC</th><th>Khác</th><th class="l">Shop trễ nhiều nhất</th></tr>' + WEEKS.map(wkRow).join('');
-document.getElementById('wk').innerHTML = WEEKS.map((w, i) => `<button type="button" data-i="${i}">${w.label}</button>`).join('');
-document.getElementById('wk').addEventListener('click', (e) => { const b = e.target.closest('button'); if (b) show(+b.dataset.i, true); });
-function show(i, push) {
-const D = WEEKS[i];
-document.querySelectorAll('#wk button').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.i === i)));
+// ===== chon ky: tung tuan / nhieu tuan / ca thang =====
+const MONTHS = [...new Set(WEEKS.map((w) => w.key.slice(0, 7)))];
+const mLabel = (m) => 'Tháng ' + +m.slice(5) + '/' + m.slice(0, 4);
+function merge(ws) {
+  if (ws.length === 1) return ws[0];
+  const o = [...ws].sort((a, b) => a.key.localeCompare(b.key));
+  const sum = (k) => o.reduce((s, w) => s + (w[k] || 0), 0);
+  const grp = {}, cz = {}, sh = {};
+  o.forEach((w) => {
+    for (const [k, v] of Object.entries(w.grp)) grp[k] = (grp[k] || 0) + v;
+    w.causes.forEach((c) => { const k = c.g + '||' + c.name; (cz[k] = cz[k] || { g: c.g, name: c.name, n: 0 }).n += c.n; });
+    w.shops.forEach((s) => { const x = (sh[s.name] = sh[s.name] || { name: s.name, total: 0, nouid: 0, late: 0, uid: 0, shop: 0, vc: 0, khac: 0 });
+      ['total', 'nouid', 'late', 'uid', 'shop', 'vc', 'khac'].forEach((k) => (x[k] += s[k] || 0)); });
+  });
+  return { label: o.map((w) => w.label).join(' + '), from: o[0].from, to: o[o.length - 1].to, snap: o[o.length - 1].snap,
+    totalPost: sum('totalPost'), nouid: sum('nouid'), late: sum('late'), both: sum('both'), grp,
+    causes: Object.values(cz).sort((a, b) => b.n - a.n), days: o.flatMap((w) => w.days),
+    shops: Object.values(sh).sort((a, b) => b.late - a.late) };
+}
+let SEL = [0], PREF = '';
+const pn = document.getElementById('wkPn');
+pn.innerHTML = '<div class="gh">Chọn nhanh</div>' +
+  (WEEKS.length > 1 ? `<button type="button" class="qk" data-q="all">Tất cả các tuần (${WEEKS.length} tuần)</button>` : '') +
+  MONTHS.map((m) => { const n = WEEKS.filter((w) => w.key.startsWith(m)).length; return `<button type="button" class="qk" data-q="m${m}">Cả ${mLabel(m).toLowerCase()} <span class="sm">${n} tuần có số liệu</span></button>`; }).join('') +
+  '<hr><div class="gh">Theo tuần (chọn 1 hoặc nhiều tuần)</div>' +
+  WEEKS.map((w, i) => `<label><input type="checkbox" value="${i}"> Tuần ${w.label} <span class="sm">${p(w.late, w.totalPost)}</span></label>`).join('');
+const keyOf = (sel) => { if (sel.length === WEEKS.length && WEEKS.length > 1) return 'all';
+  for (const m of MONTHS) { const ix = WEEKS.map((w, i) => (w.key.startsWith(m) ? i : -1)).filter((i) => i >= 0); if (ix.length === sel.length && ix.every((i) => sel.includes(i)) && sel.length > 1) return 'm' + m; }
+  return sel.map((i) => WEEKS[i].key).join(','); };
+const nameOf = (sel, k) => (k === 'all' ? 'Tất cả các tuần' : k[0] === 'm' ? 'Cả ' + mLabel(k.slice(1)).toLowerCase() : sel.length === 1 ? 'Tuần ' + WEEKS[sel[0]].label : sel.length + ' tuần: ' + [...sel].sort((a, b) => b - a).map((i) => WEEKS[i].label).join(', '));
+pn.addEventListener('click', (e) => { const b = e.target.closest('.qk'); if (!b) return;
+  const q = b.dataset.q; SEL = q === 'all' ? WEEKS.map((_, i) => i) : WEEKS.map((w, i) => (w.key.startsWith(q.slice(1)) ? i : -1)).filter((i) => i >= 0);
+  PREF = q; show(SEL, true); document.getElementById('wk').open = false; });
+pn.addEventListener('change', () => { const s = [...pn.querySelectorAll('input:checked')].map((x) => +x.value); if (!s.length) { pn.querySelector('input[value="' + SEL[0] + '"]').checked = true; return; } SEL = s; PREF = ''; show(SEL, true); });
+document.addEventListener('click', (e) => { const d = document.getElementById('wk'); if (d.open && !d.contains(e.target)) d.open = false; });
+function show(sel, push) {
+const D = merge(sel.map((i) => WEEKS[i]));
+const k = PREF || keyOf(sel);
+pn.querySelectorAll('input').forEach((x) => (x.checked = sel.includes(+x.value)));
+pn.querySelectorAll('.qk').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.q === k)));
+document.getElementById('wkCur').textContent = nameOf(sel, k);
 document.getElementById('h1').textContent = 'Đơn POST trễ – đơn tạo từ ' + D.from + ' đến ' + D.to;
 document.getElementById('snap').textContent = D.snap;
-document.title = 'Đơn POST trễ ' + D.label;
-if (push) { try { history.replaceState(null, '', '?tuan=' + D.key); } catch (e) {} }
+document.title = 'Đơn POST trễ ' + D.from + ' – ' + D.to;
+if (push) { try { history.replaceState(null, '', '?tuan=' + k); } catch (e) {} }
 CH.forEach((c) => c.destroy()); CH = [];
 const L = D.late, g = (k) => D.grp[k] || 0;
 const d10 = D.days.find(d => d.d === '10-10') || { late: 0, total: 0 };
@@ -168,8 +216,12 @@ function charts() {
 }
 (document.fonts ? document.fonts.ready : Promise.resolve()).then(charts);
 }
-const q = new URLSearchParams(location.search).get('tuan'); const i0 = Math.max(0, WEEKS.findIndex((w) => w.key === q));
-show(i0, false);
+const q = new URLSearchParams(location.search).get('tuan') || '';
+PREF = q === 'all' || q[0] === 'm' ? q : '';
+if (q === 'all') SEL = WEEKS.map((_, i) => i);
+else if (q[0] === 'm') { const s = WEEKS.map((w, i) => (w.key.startsWith(q.slice(1)) ? i : -1)).filter((i) => i >= 0); if (s.length) SEL = s; }
+else if (q) { const s = q.split(',').map((k) => WEEKS.findIndex((w) => w.key === k)).filter((i) => i >= 0); if (s.length) SEL = s; }
+show(SEL, false);
 </script>
 </body>
 </html>
